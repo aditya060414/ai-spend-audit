@@ -434,7 +434,7 @@ function consolidateOverLappingTools(
     const lessExpensive = groupResults[1];
 
     const idx = updated.findIndex((r) => r.toolName === mostExpensive.toolName);
-    if (updated[idx].recommendedAction === "keep") continue;
+    if (updated[idx].recommendedAction !== "keep") continue;
 
     updated[idx] = {
       ...updated[idx],
@@ -453,12 +453,12 @@ function consolidateOverLappingTools(
   return updated;
 }
 
-// main functions 
+// main functions
 export function runAuditEngine(input: AuditInput): AuditSummary {
-    // get audit for single tool using helper function
+  // get audit for single tool using helper function
   let perTool = input.tools.map((tool) => auditSingleTool(tool, input));
 
-  // get the 
+  // get the
   perTool = consolidateOverLappingTools(perTool, input);
 
   const totalMonthlySavings = perTool.reduce(
