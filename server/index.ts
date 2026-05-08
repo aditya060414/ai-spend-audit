@@ -1,42 +1,38 @@
 import express from "express";
-import dotenv from "dotenv"
-import mongoose from "mongoose"
-import cors from "cors"
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import cors from "cors";
+import { connectDB } from "./db/connect.js";
+import auditRoute from "./routes/audit.js";
+import leadRoute from "./routes/lead.js";
+import reportRoute from "./routes/report.js";
 
 dotenv.config();
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
-const MONGO_URL = process.env.MONGO_URL! as string;
-
 
 app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
 
+app.use("/api/audit", auditRoute);
+app.use("/api/reports", reportRoute);
+app.use("/api/leads", leadRoute);
 
-const connect = async () => {
-    try {
-        if (!MONGO_URL) {
-            console.log("MongoDB URL is not defined")
-        }
-
-        await mongoose.connect(MONGO_URL);
-        console.log("Connected to DB");
-
-        app.listen(PORT, () => {
-            console.log(`Server is live on port ${PORT}`)
-        })
-
-    } catch (error) {
-        console.log(`MongoDB connection error ${error}`);
-        process.exit(1);
-    }
-}
-
-
-app.get("/", (req, res) => {
-    res.send("ai-spend-audit");
+app.get("/check", (req, res) => {
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-connect();
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+});
