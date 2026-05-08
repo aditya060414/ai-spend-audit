@@ -116,23 +116,6 @@ All pricing verified from official Cursor pricing pages.
 
 ---
 
-## Common Optimization Opportunities
-
-- Small engineering teams frequently overpay for Teams plans when Pro is sufficient.
-- Individual developers often upgrade to Pro+ or Ultra without fully utilizing higher usage limits.
-- Organizations sometimes duplicate spend across Cursor, GitHub Copilot, Claude, and ChatGPT simultaneously.
-- Teams paying for advanced governance tooling may not actively use SSO, audit logs, or centralized controls.
-- Annual billing can significantly reduce per-user costs for long-term teams.
-
----
-
-## Assumptions
-
-- Monthly pricing used unless otherwise specified.
-- Annual billing normalized where relevant.
-- Enterprise pricing excluded from direct savings calculations due to custom contracts.
-- USD used as the standard comparison currency.
-
 ## GitHub Copilot
 
 Last updated: 2026-05-07  
@@ -256,6 +239,9 @@ All pricing verified from official GitHub Copilot pricing pages.
   - Enterprise governance support
 
   Source: https://github.com/features/copilot — verified 2026-05-07
+
+---
+
 ## Claude (Anthropic)
 
 Last updated: 2026-05-07  
@@ -359,12 +345,14 @@ All pricing verified from official Anthropic pricing pages.
 ## Claude API Pricing
 
 ### Opus 4.7
-- Input:               $5    / 1M tokens
-- Output:              $25   / 1M tokens
-- Prompt cache write:  $6.25 / 1M tokens
-- Prompt cache read:   $0.50 / 1M tokens
+
+- Input: $5 / 1M tokens
+- Output: $25 / 1M tokens
+- Prompt cache write: $6.25 / 1M tokens
+- Prompt cache read: $0.50 / 1M tokens
 
 Best for:
+
 - advanced reasoning
 - coding agents
 - complex research workflows
@@ -374,12 +362,14 @@ Source: https://www.anthropic.com/pricing#api — verified 2026-05-07
 ---
 
 ### Sonnet 4.6
-- Input:               $3    / 1M tokens
-- Output:              $15   / 1M tokens
-- Prompt cache write:  $3.75 / 1M tokens
-- Prompt cache read:   $0.30 / 1M tokens
+
+- Input: $3 / 1M tokens
+- Output: $15 / 1M tokens
+- Prompt cache write: $3.75 / 1M tokens
+- Prompt cache read: $0.30 / 1M tokens
 
 Best for:
+
 - balanced production workloads
 - coding assistants
 - SaaS AI integrations
@@ -389,12 +379,14 @@ Source: https://www.anthropic.com/pricing#api — verified 2026-05-07
 ---
 
 ### Haiku 4.5
-- Input:               $1    / 1M tokens
-- Output:              $5    / 1M tokens
-- Prompt cache write:  $1.25 / 1M tokens
-- Prompt cache read:   $0.10 / 1M tokens
+
+- Input: $1 / 1M tokens
+- Output: $5 / 1M tokens
+- Prompt cache write: $1.25 / 1M tokens
+- Prompt cache read: $0.10 / 1M tokens
 
 Best for:
+
 - lightweight inference
 - automation workloads
 - cost-sensitive applications
@@ -402,23 +394,6 @@ Best for:
 Source: https://www.anthropic.com/pricing#api — verified 2026-05-07
 
 ---
-
-## Common Optimization Opportunities
-
-- Small teams often overpay for Team plans when Pro is sufficient.
-- Many startups duplicate spend across Claude, ChatGPT, and Cursor simultaneously.
-- Organizations frequently pay for admin/governance tooling they do not actively use.
-- API-heavy engineering teams may benefit more from usage-based API billing than high-seat subscription plans.
-- Haiku models are often significantly cheaper for automation tasks where advanced reasoning is unnecessary.
-
----
-
-## Assumptions
-
-- Monthly pricing used unless otherwise specified.
-- Annual billing normalized where relevant.
-- Enterprise pricing excluded from direct savings calculations due to custom contracts.
-- USD used as the standard comparison currency.
 
 ## ChatGPT (OpenAI)
 
@@ -671,7 +646,7 @@ All pricing verified from official OpenAI pricing pages.
 
 ---
 
-## OpenAI API Pricing Notes
+## OpenAI API Pricing
 
 - OpenAI additionally offers API-based token pricing separate from ChatGPT subscriptions.
 - API pricing depends on:
@@ -683,26 +658,129 @@ All pricing verified from official OpenAI pricing pages.
 - ChatGPT subscriptions and OpenAI API billing are separate products.
 
 Sources:
+
 - https://platform.openai.com/pricing
 - https://openai.com/chatgpt/pricing
 
 ---
 
-## Common Optimization Opportunities
+## Windsurf
 
-- Small teams frequently overpay for Business plans when Plus is sufficient.
-- Many users subscribe simultaneously to ChatGPT, Claude, Cursor, and Copilot despite overlapping functionality.
-- Teams often pay for advanced governance features they do not actively use.
-- API-heavy engineering organizations may benefit more from OpenAI API billing than high-seat subscription plans.
-- Pro plans are frequently underutilized outside heavy research or coding workflows.
-- Organizations sometimes duplicate spending across ChatGPT Business and GitHub Copilot/Claude subscriptions.
+Last updated: 2026-05-07  
+All pricing verified from official Windsurf pricing pages.
+
+### Individual Plans
+
+- Free: $0/user/month
+
+  Best for:
+  - students
+  - beginners
+  - lightweight AI-assisted coding
+
+  Includes:
+  - Cascade
+  - Tab autocomplete
+  - Limited premium model usage
+  - Basic AI-assisted workflows
+
+  Source: https://windsurf.com/pricing — verified 2026-05-07
 
 ---
 
-## Assumptions
+- Pro:
+  - $20/user/month
 
-- Monthly pricing used unless otherwise specified.
-- Regional INR pricing normalized approximately to USD where useful for comparisons.
-- Enterprise contracts excluded from direct savings calculations due to negotiated pricing.
-- USD used as the standard comparison currency for audit calculations.
-- Usage limits and context windows may evolve over time as OpenAI updates plans.
+  Best for:
+  - solo developers
+  - freelancers
+  - daily AI-assisted development workflows
+
+  Includes:
+  - Everything in Free
+  - Expanded premium model access
+  - Fast Context
+  - More Cascade usage
+  - More advanced autocomplete
+  - Increased workflow capacity
+
+  Source: https://windsurf.com/pricing — verified 2026-05-07
+
+---
+
+- Max:
+  - $200/user/month
+
+  Best for:
+  - power users
+  - advanced engineering workflows
+  - very high AI coding usage
+
+  Includes:
+  - Everything in Pro
+  - Maximum premium model access
+  - Expanded Fast Context
+  - Expanded Cascade capacity
+  - Higher AI throughput
+  - Priority feature access
+
+  Source: https://windsurf.com/pricing — verified 2026-05-07
+
+---
+
+### Team Plans
+
+- Teams:
+  - $40/user/month
+
+  Best for:
+  - engineering teams
+  - collaborative development environments
+  - startups using AI-assisted coding
+
+  Includes:
+  - Everything in Pro
+  - Centralized billing
+  - Admin dashboard with analytics
+  - Shared team workflows
+  - Knowledge base integrations
+  - Priority support
+  - Access controls
+  - Collaboration-oriented development tooling
+
+  Source: https://windsurf.com/pricing — verified 2026-05-07
+
+---
+
+- Enterprise: custom pricing
+
+  Best for:
+  - large organizations
+  - compliance-focused engineering teams
+  - enterprise-scale AI coding workflows
+
+  Includes:
+  - RBAC
+  - SSO
+  - Volume discounts
+  - Hybrid deployment
+  - Dedicated account management
+  - Enterprise governance controls
+  - Advanced security tooling
+  - Enhanced support and onboarding
+
+  Source: https://windsurf.com/pricing — verified 2026-05-07
+
+---
+
+## Windsurf Usage Notes
+
+- Windsurf is an AI-powered software engineering platform focused on coding workflows.
+- Windsurf overlaps heavily with Cursor and GitHub Copilot for AI-assisted development use cases.
+- Premium features revolve around Cascade, Tab autocomplete, Fast Context, and advanced AI workflow tooling.
+- Teams using multiple AI coding assistants simultaneously may experience overlapping SaaS spend.
+
+Sources:
+
+- https://windsurf.com/pricing
+- https://windsurf.com
