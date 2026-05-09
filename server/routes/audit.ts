@@ -5,7 +5,7 @@ import { runAuditEngine } from "../services/auditEngine.js";
 import { Report } from "../models/Report.js";
 import { auditLimiter } from "../middlewares/rateLimiter.js";
 import z from "zod";
-
+import { generateAISummary } from "../services/openAIServices.js";
 const router = Router();
 
 router.post("/", auditLimiter, async (req: Request, res: Response) => {
@@ -21,9 +21,8 @@ router.post("/", auditLimiter, async (req: Request, res: Response) => {
 
   const auditResults = runAuditEngine(input);
 
-  //   dummy placeholder for ai generated result
-  const aiSummary = generateFallbackSummary(input, auditResults);
-  const summaryWasFallback = true;
+  const { summary: aiSummary, wasFallback: summaryWasFallback } =
+    await generateAISummary(input, auditResults);
 
   const shareId = nanoid(10);
   try {
@@ -39,7 +38,8 @@ router.post("/", auditLimiter, async (req: Request, res: Response) => {
     return res.status(200).json({
       shareId,
       auditResults,
-      aiSummary
+      aiSummary,
+      summaryWasFallback,
     });
   } catch (error) {
     console.error("Failed to save report:", error);
@@ -47,6 +47,7 @@ router.post("/", auditLimiter, async (req: Request, res: Response) => {
   }
 });
 
+/*
 function generateFallbackSummary(
   input: { teamSize: number; useCases: string; tools: { toolName: string }[] },
   results: {
@@ -63,5 +64,5 @@ function generateFallbackSummary(
 
   return `Your team of ${input.teamSize} is currently using ${toolList} for ${input.useCases} work. Based on your current plans and seat counts, you could save $${results.totalMonthlySavings}/month ($${results.totalAnnualSavings}/year) by following the recommendations below.`;
 }
-
+*/
 export default router;
