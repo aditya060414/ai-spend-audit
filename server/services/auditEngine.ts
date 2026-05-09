@@ -248,6 +248,25 @@ const Pricing: Record<string, ToolDef> = {
       },
     ],
   },
+  Gemini: {
+    plans: [
+      {
+        name: "Free",
+        pricePerSeat: 0,
+        useCases: ["research", "writing", "mixed"],
+      },
+      {
+        name: "Google AI Pro",
+        pricePerSeat: 20,
+        useCases: ["coding", "writing", "research", "mixed"],
+      },
+      {
+        name: "Google AI Ultra",
+        pricePerSeat: 250,
+        useCases: ["coding", "research", "mixed"],
+      },
+    ],
+  },
 };
 
 // check for tools that overlap, if user is paying for more than one tool for the similar platform or work.
@@ -256,6 +275,8 @@ const OVERLAP_GROUPS: string[][] = [
   ["Cursor", "GitHub Copilot"],
   ["Windsurf", "GitHub Copilot"],
   ["Claude", "ChatGPT"],
+  ["Claude", "Gemini"],
+  ["ChatGPT", "Gemini"],
 ];
 
 // savings category
