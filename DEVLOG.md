@@ -3,6 +3,7 @@
 **Hours worked:** 2
 
 **Today's:**
+
 - Read the full assignment carefully and broke the project into frontend, backend, audit engine, and documentation tasks.
 - Using MERN stack, as I have already build projects using MERN so this will help me write more clean and efficient code.
 - Set up the monorepo structure with separate `client` and `server` folders.
@@ -13,15 +14,18 @@
 - Researched the assignment requirements more deeply, especially around the audit engine, shareable reports, and lead capture flow.
 
 **Learnings:**
+
 - The assignment is much more product-focused than algorithm-focused.
 - The core value of the project is not AI generation, but building believable and financially sensible optimization logic.
 - A large portion of the evaluation is based on documentation, reasoning, and execution discipline rather than only UI or backend complexity.
 
 **Blockers / what I'm stuck on:**
+
 - Initially ran into TypeScript module configuration issues with ES Modules vs CommonJS in the backend setup.
 - Needed to understand how NodeNext module resolution works with TypeScript imports.
 
 **Plan for tomorrow:**
+
 - Research on pricing and plans of different LLM's.
 - Build auditEngine and auditEngine test.
 - write all the cases to determine the best plan and give the cheapest plan.
@@ -35,6 +39,7 @@
 ### Today's Work
 
 #### Research & Pricing Intelligence
+
 - Researched pricing, features, token limits, seat pricing, governance controls, and usage tiers across major AI SaaS platforms:
   - ChatGPT
   - Claude
@@ -58,13 +63,17 @@
 Implemented the core SaaS optimization engine logic.
 
 ##### Type Definitions
+
 Defined reusable TypeScript types for:
+
 - `UseCases`
 - `Recommendation`
 - `SavingsCategory`
 
 ##### Interfaces
+
 Created reusable interfaces for:
+
 - `ToolInput`
 - `AuditInput`
 - `ToolAuditResult`
@@ -73,6 +82,7 @@ Created reusable interfaces for:
 - `ToolDef`
 
 ##### Pricing System
+
 - Built centralized `Pricing` object containing:
   - pricing tiers
   - seat constraints
@@ -80,7 +90,9 @@ Created reusable interfaces for:
   - enterprise/custom pricing flags
 
 ##### Audit Logic
+
 Implemented helper functions for:
+
 - plan lookup
 - cheapest compatible plan detection
 - overlap detection
@@ -88,7 +100,9 @@ Implemented helper functions for:
 - savings category classification
 
 ##### Main Audit Engine
+
 Built the main `runAuditEngine()` workflow to:
+
 - analyze current SaaS stack
 - recommend downgrades/consolidation
 - calculate projected savings
@@ -99,6 +113,7 @@ Built the main `runAuditEngine()` workflow to:
 #### `auditEngine.test.ts`
 
 Implemented 7 test cases covering:
+
 - valid downgrade recommendations
 - overlap consolidation
 - annual savings calculations
@@ -149,3 +164,41 @@ All tests passing successfully after debugging recommendation and calculation lo
 - Add API validation and error handling
 - Test all backend routes
 - Start integrating audit engine with API endpoints
+
+---
+
+## Day 3 - 08-05-2026
+
+**Hours worked:** 4.5
+
+### Today's Work
+
+- Build Report and Lead models - PII isolation design, Lead collection never exposed via API.
+- Middlewares to validate audit using `zod` and ratelimit to limit request per IP.
+- Build POST `api/audit` to take user input and _runAuditEngine_.
+- GET `api/reports` return report without PII.
+- POST `api/leads` to log user details and check for idempotent on duplicate email+shareId.
+- Tested all the three routes.
+
+---
+
+### Learnings
+
+- Generate shareable id using nanoId.
+- Zod's safeParse and learned Zod's validation for the first time.
+- PII protections and bot handling using hidden css feature on screen for users but bot can read it and faked success response.
+
+---
+
+### Blockers
+
+- Initially storing duplicate data which was consuming a lot of space.
+- PII protections, the leads data was not protected initially, found nanoId a shareable id that does not reveal user info.
+
+---
+
+### Plan for Tomorrow
+- Add Gemini API call in audit.ts to replace the fallback summary
+- Handle 429 / API errors gracefully with the templated fallback
+- Set up Resend for transactional email on lead capture
+- Write PROMPTS.md with the full summary prompt and reasoning
