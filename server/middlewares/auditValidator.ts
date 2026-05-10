@@ -2,14 +2,14 @@ import { z } from "zod";
 
 export const ToolInputSchema = z.object({
   toolName: z.string().min(1),
-  currentPlan: z.string().min(1),
+  currentPlan: z.string().default(''),   // allow empty — engine handles unknown plans gracefully
   seats: z.number().int().min(1).max(10000),
   monthlyCost: z.number().min(0).max(1000000),
 });
 
 export const AuditInputSchema = z.object({
   teamSize: z.number().int().min(1).max(100000),
-  useCases: z.enum(["coding", "writing", "data", "research", "mixed"]),
+  useCases: z.enum(["coding", "writing", "data", "research", "mixed", "learning"]),
   tools: z.array(ToolInputSchema).min(1).max(20),
 });
 
