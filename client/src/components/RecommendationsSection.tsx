@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowDownCircle, RefreshCw, XCircle, CheckCircle2, Lightbulb } from 'lucide-react';
+import { ArrowDownCircle, RefreshCw, XCircle, CheckCircle2, Lightbulb, Coins } from 'lucide-react';
 import type { ToolAuditResult, Recommendation } from '../types';
 
 interface RecommendationsSectionProps {
@@ -12,10 +12,12 @@ const actionConfig: Record<Recommendation, { label: string; color: string; bgCol
   upgrade:     { label: 'Upgrade',     color: 'text-blue-400',   bgColor: 'bg-blue-500/10',  borderColor: 'border-blue-600/30',  icon: ArrowDownCircle },
   consolidate: { label: 'Consolidate', color: 'text-rose-400',   bgColor: 'bg-rose-500/10',  borderColor: 'border-rose-600/30',  icon: XCircle       },
   switch:      { label: 'Switch',      color: 'text-indigo-400', bgColor: 'bg-indigo-500/10',borderColor: 'border-indigo-600/30',icon: RefreshCw     },
+  credits:     { label: 'Credits',     color: 'text-emerald-400', bgColor: 'bg-emerald-500/10',borderColor: 'border-emerald-600/30',icon: Coins      },
 };
 
 export function RecommendationsSection({ tools }: RecommendationsSectionProps) {
-  const actionable = tools.filter(t => t.recommendedAction !== 'keep');
+  const actionable = tools.filter(t => t.recommendedAction !== 'keep' && t.recommendedAction !== 'credits');
+  const creditBased = tools.filter(t => t.recommendedAction === 'credits');
   const optimal    = tools.filter(t => t.recommendedAction === 'keep');
 
   if (actionable.length === 0) {
@@ -49,9 +51,10 @@ export function RecommendationsSection({ tools }: RecommendationsSectionProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Display normal actionable items */}
         {actionable.map((tool, idx) => {
-          const cfg = actionConfig[tool.recommendedAction];
-          const Icon = cfg.icon;
+          const cfg = actionConfig[tool.recommendedAction] || actionConfig.keep;
+          const Icon = cfg.icon || CheckCircle2;
           return (
             <motion.div
               key={idx}
@@ -73,28 +76,78 @@ export function RecommendationsSection({ tools }: RecommendationsSectionProps) {
                   </div>
                 </div>
 
-                {tool.recommendedAction !== 'keep' && (
+                {tool.recommendedAction !== 'keep' && tool.recommendedAction !== 'credits' && (
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-xs text-zinc-500">→</span>
                     <span className="text-xs font-medium text-zinc-300">{tool.recommendedPlan}</span>
                   </div>
                 )}
 
-                <p className="text-xs text-zinc-400 leading-relaxed mb-4">{tool.reason}</p>
+                <p className="text-xs text-zinc-400 leading-relaxed mb-4">
+                  {tool.reason}
+                </p>
 
-                {tool.monthlySavings > 0 && (
+                {(tool.monthlySavings ?? 0) > 0 && (
                   <div className="flex items-center gap-3 pt-3 border-t border-zinc-800/60">
                     <div>
                       <p className="text-[10px] text-zinc-500 uppercase tracking-wider">Monthly Savings</p>
-                      <p className="text-sm font-bold text-emerald-400">+${tool.monthlySavings.toLocaleString()}</p>
+                      <p className="text-sm font-bold text-emerald-400">+${(tool.monthlySavings ?? 0).toLocaleString()}</p>
                     </div>
                     <div className="w-px h-8 bg-zinc-800" />
                     <div>
                       <p className="text-[10px] text-zinc-500 uppercase tracking-wider">Annual Savings</p>
-                      <p className="text-sm font-bold text-emerald-400">+${tool.annualSavings.toLocaleString()}</p>
+                      <p className="text-sm font-bold text-emerald-400">+${(tool.annualSavings ?? 0).toLocaleString()}</p>
                     </div>
                   </div>
                 )}
+              </div>
+            </motion.div>
+          );
+        })}
+
+        {/* Display Credit Recommendations */}
+        {creditBased.map((tool, idx) => {
+          const cfg = actionConfig.credits;
+          const Icon = cfg.icon;
+          return (
+            <motion.div
+              key={`credit-${idx}`}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45 + (actionable.length + idx) * 0.08 }}
+              className={`glass-card rounded-xl p-5 border ${cfg.borderColor} relative overflow-hidden bg-emerald-500/5`}
+            >
+              <div className={`absolute top-0 left-0 w-1 h-full bg-emerald-500/40`} />
+              <div className="pl-3">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <span className="text-sm font-semibold text-zinc-100">{tool.toolName}</span>
+                    <span className="text-xs text-zinc-500 ml-2">{tool.currentPlan}</span>
+                  </div>
+                  <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${cfg.bgColor} ${cfg.color} ${cfg.borderColor}`}>
+                    <Icon className="w-3 h-3" />
+                    {cfg.label}
+                  </div>
+                </div>
+
+                <p className="text-xs text-zinc-400 leading-relaxed mb-4">
+                  {tool.reason}
+                </p>
+
+                <div className="flex items-center justify-between pt-3 border-t border-zinc-800/60">
+                  <div className="flex items-center gap-3">
+                    <div>
+                      <p className="text-[10px] text-zinc-500 uppercase tracking-wider">Potential Savings</p>
+                      <p className="text-sm font-bold text-emerald-400">20-30% off</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => window.open('https://credex.com', '_blank')}
+                    className="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-[10px] font-bold rounded uppercase transition-colors"
+                  >
+                    Claim Credits
+                  </button>
+                </div>
               </div>
             </motion.div>
           );
