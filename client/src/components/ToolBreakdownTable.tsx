@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import type { Recommendation, ToolAuditResult } from '../types';
 import { cn } from '../lib/utils';
-import { CheckCircle2, ArrowDownCircle, RefreshCw, XCircle } from 'lucide-react';
+import { CheckCircle2, ArrowDownCircle, RefreshCw, XCircle, Coins } from 'lucide-react';
 
 interface ToolBreakdownTableProps {
   tools: ToolAuditResult[];
@@ -12,7 +12,7 @@ export function ToolBreakdownTable({ tools }: ToolBreakdownTableProps) {
   const getActionConfig = (action: Recommendation) => {
     switch (action) {
       case 'keep':
-        return { label: 'Keep', color: 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20', icon: CheckCircle2 };
+        return { label: 'Optimal', color: 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20', icon: CheckCircle2 };
       case 'downgrade':
         return { label: 'Downgrade', color: 'bg-amber-500/10 text-amber-400 border-amber-500/20', icon: ArrowDownCircle };
       case 'upgrade':
@@ -21,17 +21,21 @@ export function ToolBreakdownTable({ tools }: ToolBreakdownTableProps) {
         return { label: 'Consolidate', color: 'bg-rose-500/10 text-rose-400 border-rose-500/20', icon: XCircle };
       case 'switch':
         return { label: 'Switch', color: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20', icon: RefreshCw };
+      case 'credits':
+        return { label: 'Credits', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', icon: Coins };
       default:
         return { label: 'Unknown', color: 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20', icon: CheckCircle2 };
     }
   };
 
   const formatCurrency = (value: number) => {
+    const safe = Number(value);
+    if (!isFinite(safe)) return '$—';
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
       maximumFractionDigits: 0,
-    }).format(value);
+    }).format(safe);
   };
 
   return (
@@ -60,7 +64,7 @@ export function ToolBreakdownTable({ tools }: ToolBreakdownTableProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-800/50">
-            {tools.map((tool, idx) => {
+            {(tools || []).map((tool, idx) => {
               const ActionIcon = getActionConfig(tool.recommendedAction).icon;
               return (
                 <motion.tr 
@@ -71,10 +75,18 @@ export function ToolBreakdownTable({ tools }: ToolBreakdownTableProps) {
                   className="hover:bg-zinc-800/30 transition-colors"
                 >
                   <td className="px-6 py-4 font-medium text-zinc-200">
-                    {tool.toolName}
+                    <div className="flex flex-col gap-1">
+                      {tool.toolName}
+                      {tool.credexEligible && (
+                        <div className="inline-flex items-center gap-1 text-[10px] text-emerald-400/80 bg-emerald-400/5 px-1.5 py-0.5 rounded border border-emerald-400/10 w-fit">
+                          <Coins className="w-2.5 h-2.5" />
+                          Credits Available
+                        </div>
+                      )}
+                    </div>
                   </td>
                   <td className="px-6 py-4 text-zinc-400">
-                    {tool.currentPlan}
+                    {tool.currentPlan || <span className="text-zinc-600 italic">Not specified</span>}
                   </td>
                   <td className="px-6 py-4">
                     <div className={cn(
@@ -86,7 +98,7 @@ export function ToolBreakdownTable({ tools }: ToolBreakdownTableProps) {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-zinc-300">
-                    {tool.recommendedPlan}
+                    {tool.recommendedPlan || <span className="text-zinc-600">—</span>}
                   </td>
                   <td className="px-6 py-4 text-right text-zinc-400">
                     {formatCurrency(tool.currentMonthlySpending)}
