@@ -18,6 +18,6 @@ export const LeadInputSchema = z.object({
   email: z.string().email(),
   companyName: z.string().optional(),
   role: z.string().optional(),
-  website: z.string().optional(), // keep the website from attact this will be hidden using css but see this but humans don't
+  website: z.string().optional(), // keep the website from attact this will be hidden using css bot can see this but humans don't
 });
 
