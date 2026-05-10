@@ -75,7 +75,7 @@ const Pricing: Record<string, ToolDef> = {
       {
         name: "Hobby",
         pricePerSeat: 0,
-        useCases: ["coding"],
+        useCases: ["coding"], 
         maxSeats: 1,
       },
 
@@ -235,7 +235,7 @@ const Pricing: Record<string, ToolDef> = {
       },
 
       {
-        name: "Teams",
+        name: "Team",
         pricePerSeat: 40,
         useCases: ["coding"],
       },
@@ -330,24 +330,45 @@ function findCheaperPlan(
 function auditSingleTool(tool: ToolInput, input: AuditInput): ToolAuditResult {
   const toolDef = Pricing[tool.toolName];
 
-  // if plan for the tool does not exist then return the same data entered by the user and reason
+  // Tool is completely unknown — still produce a useful result
   if (!toolDef) {
+    const planLabel = tool.currentPlan || "unspecified plan";
     return {
       toolName: tool.toolName,
-      currentPlan: tool.currentPlan,
+      currentPlan: tool.currentPlan || "Custom",
       currentMonthlySpending: tool.monthlyCost,
       recommendedAction: "keep",
-      recommendedPlan: tool.currentPlan,
+      recommendedPlan: tool.currentPlan || "Custom",
       projectedMonthlyCost: tool.monthlyCost,
       monthlySavings: 0,
       annualSavings: 0,
       reason:
-        "No verified pricing data available. Verify manually at the vendor pricing page.",
+        `Your team is using ${tool.toolName} on the ${planLabel} tier for ${tool.seats} seat(s). ` +
+        `Since ${tool.toolName} isn't in our verified database, we recommend keeping it at your current $${tool.monthlyCost}/month spend while you manually verify pricing.`,
     };
   }
 
   // find current plan
   const currentPlanDef = findPlan(tool.toolName, tool.currentPlan);
+
+  // Plan is unknown/blank — use the reported monthlyCost as baseline but still check overlaps
+  if (!currentPlanDef) {
+    const planLabel = tool.currentPlan || "unspecified plan";
+    return {
+      toolName: tool.toolName,
+      currentPlan: tool.currentPlan || "Custom",
+      currentMonthlySpending: tool.monthlyCost,
+      recommendedAction: "keep",
+      recommendedPlan: tool.currentPlan || "Custom",
+      projectedMonthlyCost: tool.monthlyCost,
+      monthlySavings: 0,
+      annualSavings: 0,
+      reason:
+        `You've entered ${tool.toolName} on a "${planLabel}" tier. ` +
+        `While we recognize ${tool.toolName}, this specific plan isn't in our database yet. ` +
+        `We've baselined your current $${tool.monthlyCost}/month spend as the optimal state until further data is available.`,
+    };
+  }
 
   // check if the seats exceed plan limit, if not proceed
   if (currentPlanDef?.maxSeats && tool.seats > currentPlanDef.maxSeats) {
@@ -373,9 +394,9 @@ function auditSingleTool(tool: ToolInput, input: AuditInput): ToolAuditResult {
         monthlySavings: Math.max(0, monthlySavings),
         annualSavings: Math.max(0, monthlySavings * 12),
         reason:
-          `${tool.currentPlan} supports max ${currentPlanDef.maxSeats} seat(s). ` +
-          `At ${tool.seats} seats, ${otherPlan.name} ($${otherPlan.pricePerSeat}/seat) ` +
-          `is the appropriate tier at $${projectedMonthly}/month.`,
+          `Your current ${tool.currentPlan} plan supports a maximum of ${currentPlanDef.maxSeats} seat(s). ` +
+          `With your team size of ${tool.seats}, the ${otherPlan.name} plan ($${otherPlan.pricePerSeat}/seat) ` +
+          `is required, resulting in a $${projectedMonthly}/month cost.`,
       };
     }
   }
@@ -405,10 +426,10 @@ function auditSingleTool(tool: ToolInput, input: AuditInput): ToolAuditResult {
           monthlySavings: Math.max(0, monthlySavings),
           annualSavings: Math.max(0, monthlySavings * 12),
           reason:
-            `${tool.currentPlan} costs $${currentPlanDef.pricePerSeat}/seat. ` +
-            `${cheaper.name} costs $${cheaper.pricePerSeat}/seat and covers your ` +
-            `${input.useCases} use case at ${tool.seats} seat(s). ` +
-            `Downgrading saves $${monthlySavings}/month ($${monthlySavings * 12}/year).`,
+            `You're paying $${currentPlanDef.pricePerSeat}/seat on the ${tool.currentPlan} plan. ` +
+            `The ${cheaper.name} plan costs only $${cheaper.pricePerSeat}/seat and fully supports your ` +
+            `${input.useCases} workflow for ${tool.seats} seat(s). ` +
+            `Switching will save you $${monthlySavings}/month.`,
         };
       }
     }
@@ -424,8 +445,9 @@ function auditSingleTool(tool: ToolInput, input: AuditInput): ToolAuditResult {
     monthlySavings: 0,
     annualSavings: 0,
     reason:
-      `${tool.currentPlan} at $${currentPlanDef?.pricePerSeat ?? "?"}/seat is ` +
-      `appropriately sized for ${tool.seats} seat(s) on a ${input.useCases} use case.`,
+      `The ${tool.currentPlan} plan ($${currentPlanDef.pricePerSeat}/seat) is ` +
+      `the most cost-effective tier for your ${tool.seats} seat(s) and ${input.useCases} use case. ` +
+      `Your current spend of $${tool.monthlyCost}/month is optimal.`,
   };
 }
 
@@ -462,13 +484,13 @@ function consolidateOverLappingTools(
       recommendedAction: "consolidate",
       recommendedPlan: lessExpensive.toolName,
       projectedMonthlyCost: 0,
-      monthlySavings: mostExpensive.currentMonthlySpending,
-      annualSavings: mostExpensive.currentMonthlySpending * 12,
+      monthlySavings: Number(mostExpensive.currentMonthlySpending) || 0,
+      annualSavings: (Number(mostExpensive.currentMonthlySpending) || 0) * 12,
       reason:
         `${mostExpensive.toolName} and ${lessExpensive.toolName} both provide ` +
         `overlapping AI assistance for your ${input.useCases} workflow. ` +
         `Eliminating ${mostExpensive.toolName} saves $${mostExpensive.currentMonthlySpending}/month ` +
-        `($${mostExpensive.currentMonthlySpending * 12}/year) without capability loss.`,
+        `($${(mostExpensive.currentMonthlySpending * 12).toLocaleString()}/year) without capability loss.`,
     };
   }
   return updated;
@@ -476,11 +498,35 @@ function consolidateOverLappingTools(
 
 // main functions
 export function runAuditEngine(input: AuditInput): AuditSummary {
-  // get audit for single tool using helper function
-  let perTool = input.tools.map((tool) => auditSingleTool(tool, input));
+  // Sanitize all numeric fields to prevent NaN propagation
+  const sanitizedTools = input.tools.map((t) => {
+    const seats = Math.max(1, Number(t.seats) || 1);
+    const monthlyCost = Math.max(0, Number(t.monthlyCost) || 0);
+    return {
+      ...t,
+      seats,
+      monthlyCost,
+      currentPlan: (t.currentPlan ?? "").trim(),
+      toolName: (t.toolName ?? "").trim(),
+    };
+  });
 
-  // get the
-  perTool = consolidateOverLappingTools(perTool, input);
+  const sanitizedInput: AuditInput = { ...input, tools: sanitizedTools };
+
+  // get audit for single tool using helper function
+  let perTool = sanitizedInput.tools.map((tool) => auditSingleTool(tool, sanitizedInput));
+
+  // check for overlapping/duplicate tools
+  perTool = consolidateOverLappingTools(perTool, sanitizedInput);
+
+  // Final pass to ensure all numbers are finite and non-negative
+  perTool = perTool.map(t => ({
+    ...t,
+    currentMonthlySpending: Number(t.currentMonthlySpending) || 0,
+    projectedMonthlyCost: Number(t.projectedMonthlyCost) || 0,
+    monthlySavings: Math.max(0, Number(t.monthlySavings) || 0),
+    annualSavings: Math.max(0, Number(t.annualSavings) || 0),
+  }));
 
   const totalMonthlySavings = perTool.reduce(
     (sum, t) => sum + t.monthlySavings,
