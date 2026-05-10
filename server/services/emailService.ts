@@ -2,10 +2,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// ─────────────────────────────────────────────
-// TYPES
-// ─────────────────────────────────────────────
-
+// SCHEMA
 interface SendAuditEmailParams {
   to: string;
   shareId: string;
@@ -14,14 +11,14 @@ interface SendAuditEmailParams {
   isHighValue: boolean;
 }
 
-// ─────────────────────────────────────────────
 // HELPERS
-// ─────────────────────────────────────────────
 
+// Check email is valid
 function isValidEmail(email: string): boolean {
   return /^\S+@\S+\.\S+$/.test(email);
 }
 
+// email subject
 function getSubjectLine(monthlySavings: number): string {
   if (monthlySavings >= 500) {
     return `Potential AI savings identified: ` + `$${monthlySavings}/month`;
@@ -34,10 +31,7 @@ function getSubjectLine(monthlySavings: number): string {
   return "Your AI spend audit — your stack looks optimized";
 }
 
-// ─────────────────────────────────────────────
-// EMAIL TEMPLATE
-// ─────────────────────────────────────────────
-
+// email template
 function buildEmailHTML(params: SendAuditEmailParams): string {
   const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
 
@@ -202,14 +196,10 @@ function buildEmailHTML(params: SendAuditEmailParams): string {
   `;
 }
 
-// ─────────────────────────────────────────────
-// MAIN EMAIL SENDER
-// ─────────────────────────────────────────────
-
+// MAIN 
 export async function sendAuditEmail(
   params: SendAuditEmailParams,
 ): Promise<boolean> {
-  // Skip during local development
   if (!process.env.RESEND_API_KEY) {
     console.warn("RESEND_API_KEY not set — skipping email send");
 
@@ -253,9 +243,7 @@ ${reportUrl}
 
     return true;
   } catch (error: unknown) {
-    // Email failure should NEVER
     // break lead capture flow
-
     const message = error instanceof Error ? error.message : String(error);
 
     console.error(`Email send failed: ${message}`);
