@@ -57,13 +57,13 @@ export function SpendChartsSection({ summary }: SpendChartsSectionProps) {
           <p className="text-xs text-zinc-500 mt-0.5">Current vs optimized cost per tool</p>
         </div>
         <div className="h-52">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={barData} margin={{ top: 0, right: 0, left: -16, bottom: 0 }} barCategoryGap="30%">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+            <BarChart data={barData} margin={{ top: 0, right: 0, left: -25, bottom: 0 }} barCategoryGap="25%">
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-              <XAxis dataKey="name" tick={{ fill: '#71717a', fontSize: 11 }} tickLine={false} axisLine={false} />
-              <YAxis tick={{ fill: '#71717a', fontSize: 11 }} tickLine={false} axisLine={false} tickFormatter={v => `$${v}`} />
+              <XAxis dataKey="name" tick={{ fill: '#71717a', fontSize: 9 }} tickLine={false} axisLine={false} />
+              <YAxis tick={{ fill: '#71717a', fontSize: 9 }} tickLine={false} axisLine={false} tickFormatter={v => `$${v}`} />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
-              <Legend wrapperStyle={{ fontSize: '11px', color: '#a1a1aa', paddingTop: '12px' }} />
+              <Legend wrapperStyle={{ fontSize: '10px', color: '#a1a1aa', paddingTop: '16px' }} />
               <Bar dataKey="Current" fill="#3b82f6" radius={[4, 4, 0, 0]} />
               <Bar dataKey="Optimized" fill="#10b981" radius={[4, 4, 0, 0]} fillOpacity={0.85} />
             </BarChart>
@@ -72,25 +72,25 @@ export function SpendChartsSection({ summary }: SpendChartsSectionProps) {
       </div>
 
       {/* Pie Chart — Savings Distribution */}
-      <div className="lg:col-span-2 glass-card rounded-xl p-6">
+      <div className="lg:col-span-2 glass-card rounded-xl p-5 sm:p-6">
         <div className="mb-5">
           <h2 className="text-base font-semibold text-zinc-100">Savings Distribution</h2>
           <p className="text-xs text-zinc-500 mt-0.5">Monthly savings breakdown by tool</p>
         </div>
         {pieData.length === 0 ? (
-          <div className="h-52 flex items-center justify-center text-zinc-500 text-sm">
-            No savings identified.
+          <div className="h-52 flex items-center justify-center text-zinc-500 text-sm text-center px-4">
+            No optimization savings identified yet.
           </div>
         ) : (
-          <div className="h-52">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-64 sm:h-52">
+            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
               <PieChart>
                 <Pie
                   data={pieData}
                   cx="50%"
-                  cy="50%"
-                  innerRadius={55}
-                  outerRadius={80}
+                  cy="45%"
+                  innerRadius={50}
+                  outerRadius={70}
                   paddingAngle={3}
                   dataKey="value"
                   stroke="none"
@@ -101,12 +101,12 @@ export function SpendChartsSection({ summary }: SpendChartsSectionProps) {
                 </Pie>
                 <Tooltip content={<CustomTooltip />} />
                 <Legend
-                  layout="vertical"
-                  verticalAlign="middle"
-                  align="right"
-                  wrapperStyle={{ fontSize: '11px', color: '#a1a1aa' }}
+                  layout="horizontal"
+                  verticalAlign="bottom"
+                  align="center"
+                  wrapperStyle={{ fontSize: '9px', color: '#a1a1aa', paddingTop: '10px' }}
                   iconType="circle"
-                  iconSize={8}
+                  iconSize={6}
                 />
               </PieChart>
             </ResponsiveContainer>
