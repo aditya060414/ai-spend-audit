@@ -15,39 +15,22 @@ interface PdfReportProps {
 // -----------------------------------------------------------------------------
 
 const PdfHeaderBlock = ({ data, theme }: { data: ReportData, theme: ThemeConfig }) => {
-  const { auditResults } = data;
   return (
     <div className={`w-full ${theme.spacing.section}`}>
-      <div className={`p-4 md:p-6 rounded-xl border ${theme.borderSecondary} ${theme.headerGradient} shadow-sm`}>
-        <div className="flex justify-between items-start mb-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <div className={`w-1.5 h-1.5 rounded-full ${theme.chartColors[0] ? `bg-[${theme.chartColors[0]}]` : 'bg-blue-500'}`} />
-              <span className={`text-[10px] font-semibold tracking-wider uppercase ${theme.textSecondary}`}>
-                AI Spend Optimization Report
-              </span>
-            </div>
-            <h1 className={`text-2xl font-bold tracking-tight bg-clip-text text-transparent ${theme.headerGradientText}`}>
-              Financial Audit
-            </h1>
+      <div className={`flex justify-between items-end border-b pb-6 ${theme.borderPrimary}`}>
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span className={`text-[10px] font-bold tracking-[0.1em] uppercase ${theme.textSecondary}`}>
+              AI Spend Audit
+            </span>
           </div>
-          <div className="text-right">
-            <div className={`text-[10px] ${theme.textMuted} mb-0.5`}>Generated</div>
-            <div className={`text-xs font-medium ${theme.textPrimary}`}>
-              {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-            </div>
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-2 gap-4 pt-3 border-t border-dashed border-zinc-500/30">
-          <div>
-            <div className={`text-[10px] ${theme.textMuted} mb-0.5`}>Total Analyzed Tools</div>
-            <div className={`text-lg font-bold ${theme.textPrimary}`}>{auditResults.perTool.length}</div>
-          </div>
-          <div>
-            <div className={`text-[10px] ${theme.textMuted} mb-0.5`}>Optimization Potential</div>
-            <div className="text-lg font-bold text-emerald-500">High</div>
-          </div>
+          <h1 className={`text-3xl font-bold tracking-tight ${theme.textPrimary}`}>
+            Stack Optimization
+          </h1>
+          <p className={`text-xs mt-1 ${theme.textMuted}`}>
+            Report ID: <span className="font-medium opacity-80">#{data.shareId?.slice(0, 8).toUpperCase() || 'N/A'}</span> • {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+          </p>
         </div>
       </div>
     </div>
@@ -56,17 +39,25 @@ const PdfHeaderBlock = ({ data, theme }: { data: ReportData, theme: ThemeConfig 
 
 const PdfKPIBlock = ({ data, theme }: { data: ReportData, theme: ThemeConfig }) => {
   const { auditResults } = data;
+  const perTool = auditResults?.perTool || [];
+  const currentTotal = perTool.reduce((acc, tool) => acc + (tool.currentMonthlySpending || 0), 0);
+  const optimizedTotal = perTool.reduce((acc, tool) => acc + (tool.projectedMonthlyCost || 0), 0);
+
+  const metrics = [
+    { label: 'Current Monthly', value: currentTotal, color: theme.textPrimary },
+    { label: 'Optimized Monthly', value: optimizedTotal, color: 'text-emerald-500' },
+    { label: 'Monthly Savings', value: auditResults.totalMonthlySavings, color: 'text-emerald-500' },
+    { label: 'Annual Savings', value: auditResults.totalAnnualSavings, color: 'text-emerald-500' }
+  ];
+
   return (
-    <div className={`grid grid-cols-4 gap-3 ${theme.spacing.section}`}>
-      {[
-        { label: 'Current Monthly', value: `$${auditResults.perTool.reduce((acc, tool) => acc + tool.currentMonthlySpending, 0).toLocaleString()}` },
-        { label: 'Optimized Monthly', value: `$${auditResults.perTool.reduce((acc, tool) => acc + tool.projectedMonthlyCost, 0).toLocaleString()}`, color: 'text-emerald-500' },
-        { label: 'Monthly Savings', value: `$${auditResults.totalMonthlySavings.toLocaleString()}`, color: 'text-emerald-500' },
-        { label: 'Annual Savings', value: `$${auditResults.totalAnnualSavings.toLocaleString()}`, color: 'text-emerald-500' }
-      ].map((kpi, i) => (
-        <div key={i} className={`rounded-xl border ${theme.borderPrimary} ${theme.cardBg} ${theme.spacing.card} shadow-sm`}>
-          <p className={`text-[10px] font-medium uppercase tracking-wider ${theme.textSecondary} mb-1.5`}>{kpi.label}</p>
-          <p className={`text-lg font-bold ${kpi.color || theme.textPrimary}`}>{kpi.value}</p>
+    <div className={`grid grid-cols-4 gap-4 ${theme.spacing.section}`}>
+      {metrics.map((m, i) => (
+        <div key={i} className={`rounded-xl border ${theme.borderPrimary} ${theme.cardBgSecondary} p-5 flex flex-col justify-between h-24`}>
+          <p className={`text-[9px] font-bold uppercase tracking-[0.1em] ${theme.textMuted}`}>{m.label}</p>
+          <p className={`text-xl font-bold tracking-tight ${m.color.startsWith('text-') ? m.color : ''}`} style={!m.color.startsWith('text-') ? { color: 'inherit' } : undefined}>
+            ${m.value.toLocaleString()}
+          </p>
         </div>
       ))}
     </div>
@@ -76,14 +67,14 @@ const PdfKPIBlock = ({ data, theme }: { data: ReportData, theme: ThemeConfig }) 
 const PdfSummaryBlock = ({ data, theme }: { data: ReportData, theme: ThemeConfig }) => {
   return (
     <div className={`rounded-xl border ${theme.borderPrimary} ${theme.cardBgSecondary} overflow-hidden ${theme.spacing.section}`}>
-      <div className={`px-4 py-2.5 border-b ${theme.borderPrimary} ${theme.tableHeaderBg}`}>
-        <h3 className={`text-xs font-semibold uppercase tracking-wider ${theme.textPrimary}`}>
-          Executive AI Analysis
+      <div className={`px-5 py-3 border-b ${theme.borderPrimary} ${theme.tableHeaderBg}`}>
+        <h3 className={`text-[11px] font-bold uppercase tracking-widest ${theme.textPrimary}`}>
+          Executive Summary
         </h3>
       </div>
-      <div className={`p-4 prose prose-sm max-w-none ${theme.textSecondary}`}>
-        {data.aiSummary.split('\n').map((paragraph, idx) => (
-          paragraph.trim() ? <p key={idx} className="mb-2 last:mb-0 leading-relaxed text-xs">{paragraph}</p> : null
+      <div className={`p-5 ${theme.textSecondary}`}>
+        {(data.aiSummary || "").split('\n').map((paragraph, idx) => (
+          paragraph.trim() ? <p key={idx} className="mb-3 last:mb-0 leading-[1.6] text-[11px]">{paragraph}</p> : null
         ))}
       </div>
     </div>
@@ -91,74 +82,70 @@ const PdfSummaryBlock = ({ data, theme }: { data: ReportData, theme: ThemeConfig
 };
 
 const PdfChartsBlock = ({ data, theme }: { data: ReportData, theme: ThemeConfig }) => {
-  const chartData = data.auditResults.perTool.map(tool => ({
+  const perTool = data.auditResults?.perTool || [];
+  
+  const chartData = perTool.map(tool => ({
     name: tool.toolName,
-    current: tool.currentMonthlySpending,
-    optimized: tool.projectedMonthlyCost,
+    current: tool.currentMonthlySpending || 0,
+    optimized: tool.projectedMonthlyCost || 0,
   })).sort((a, b) => b.current - a.current).slice(0, 5);
 
-  const savingsData = data.auditResults.perTool
-    .filter(t => t.monthlySavings > 0)
+  const savingsData = perTool
+    .filter(t => (t.monthlySavings || 0) > 0)
     .map(tool => ({ name: tool.toolName, value: tool.monthlySavings }))
     .sort((a, b) => b.value - a.value);
 
   const COLORS = theme.chartColors;
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className={`p-2.5 rounded-lg border ${theme.borderPrimary} ${theme.cardBg} shadow-xl backdrop-blur-md flex flex-col gap-1 z-50 min-w-[120px]`}>
-          <p className={`text-[10px] font-bold ${theme.textPrimary} mb-1 border-b ${theme.borderSecondary} pb-1`}>{label || 'Savings'}</p>
-          {payload.map((entry: any, index: number) => (
-            <div key={index} className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: entry.color }} />
-                <span className={`text-[9px] font-medium ${theme.textSecondary}`}>{entry.name}</span>
-              </div>
-              <span className={`text-[10px] font-bold ${theme.textPrimary}`}>${entry.value}</span>
-            </div>
-          ))}
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
-    <div className={`grid grid-cols-2 gap-4 ${theme.spacing.section}`}>
-      <div className={`rounded-xl border ${theme.borderPrimary} ${theme.cardBg} ${theme.spacing.card}`}>
-        <h3 className={`text-[10px] font-semibold uppercase tracking-wider ${theme.textPrimary} mb-3`}>
-          Spend Comparison (Top 5)
+    <div className={`grid grid-cols-2 gap-6 ${theme.spacing.section}`}>
+      <div className={`rounded-xl border ${theme.borderPrimary} ${theme.cardBgSecondary} p-5`}>
+        <h3 className={`text-[10px] font-bold uppercase tracking-widest ${theme.textMuted} mb-6`}>
+          Monthly Spend Comparison
         </h3>
-        <div className="h-32 w-full">
+        <div className="h-40 w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke={theme.borderPrimary} vertical={false} />
-              <XAxis dataKey="name" stroke={theme.textMuted} fontSize={9} tickLine={false} axisLine={false} />
+            <BarChart data={chartData} margin={{ top: 0, right: 0, left: -25, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="4 4" stroke={theme.borderPrimary} vertical={false} />
+              <XAxis dataKey="name" stroke={theme.textMuted} fontSize={9} tickLine={false} axisLine={false} tick={{dy: 10}} />
               <YAxis stroke={theme.textMuted} fontSize={9} tickLine={false} axisLine={false} tickFormatter={(val) => `$${val}`} />
-              <Tooltip cursor={{fill: 'transparent'}} content={<CustomTooltip />} />
-              <Legend wrapperStyle={{ fontSize: '9px', paddingTop: '5px' }} />
-              <Bar dataKey="current" name="Current" fill={COLORS[0]} radius={[2, 2, 0, 0]} />
-              <Bar dataKey="optimized" name="Optimized" fill={COLORS[1] || COLORS[0]} fillOpacity={0.6} radius={[2, 2, 0, 0]} />
+              <Bar dataKey="current" name="Current" fill={theme.textMuted === 'text-[#52525b]' ? '#52525b' : '#a1a1aa'} radius={[2, 2, 0, 0]} barSize={20} />
+              <Bar dataKey="optimized" name="Optimized" fill="#10b981" radius={[2, 2, 0, 0]} barSize={20} />
             </BarChart>
           </ResponsiveContainer>
         </div>
+        <div className="flex justify-center gap-6 mt-4">
+           <div className="flex items-center gap-2">
+             <div className="w-2 h-2 rounded-full" style={{ backgroundColor: theme.textMuted === 'text-[#52525b]' ? '#a1a1aa' : '#52525b' }} />
+             <span className={`text-[9px] font-bold uppercase ${theme.textMuted}`}>Current</span>
+           </div>
+           <div className="flex items-center gap-2">
+             <div className="w-2 h-2 rounded-full bg-emerald-500" />
+             <span className={`text-[9px] font-bold uppercase ${theme.textMuted}`}>Optimized</span>
+           </div>
+        </div>
       </div>
 
-      <div className={`rounded-xl border ${theme.borderPrimary} ${theme.cardBg} ${theme.spacing.card}`}>
-        <h3 className={`text-[10px] font-semibold uppercase tracking-wider ${theme.textPrimary} mb-3`}>
+      <div className={`rounded-xl border ${theme.borderPrimary} ${theme.cardBgSecondary} p-5`}>
+        <h3 className={`text-[10px] font-bold uppercase tracking-widest ${theme.textMuted} mb-6`}>
           Savings Distribution
         </h3>
-        <div className="h-32 w-full">
+        <div className="h-40 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
-              <Pie data={savingsData} innerRadius={25} outerRadius={50} paddingAngle={2} dataKey="value" stroke="none">
+              <Pie data={savingsData} innerRadius={35} outerRadius={60} paddingAngle={4} dataKey="value" stroke="none">
                 {savingsData.map((_, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
               </Pie>
-              <Tooltip content={<CustomTooltip />} />
-              <Legend layout="vertical" verticalAlign="middle" align="right" wrapperStyle={{ fontSize: '9px' }} />
             </PieChart>
           </ResponsiveContainer>
+        </div>
+        <div className="grid grid-cols-2 gap-y-1 mt-4">
+          {savingsData.slice(0, 4).map((item, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
+              <span className={`text-[9px] font-medium truncate ${theme.textSecondary}`}>{item.name}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -167,78 +154,90 @@ const PdfChartsBlock = ({ data, theme }: { data: ReportData, theme: ThemeConfig 
 
 const PdfTableBlock = ({ data, theme }: { data: ReportData, theme: ThemeConfig }) => {
   return (
-    <div className={`rounded-xl border ${theme.borderPrimary} ${theme.cardBg} overflow-hidden ${theme.spacing.section}`}>
-      <div className={`px-3 py-2 border-b ${theme.borderPrimary} ${theme.tableHeaderBg}`}>
-        <h3 className={`text-[10px] font-semibold uppercase tracking-wider ${theme.textPrimary}`}>
-          Optimization Breakdown
+    <div className={`rounded-xl border ${theme.borderPrimary} overflow-hidden ${theme.spacing.section}`}>
+      <div className={`px-5 py-4 border-b ${theme.borderPrimary} ${theme.tableHeaderBg}`}>
+        <h3 className={`text-[11px] font-bold uppercase tracking-widest ${theme.textPrimary}`}>
+          Detailed Tool Breakdown
         </h3>
       </div>
-      <table className="w-full text-left border-collapse text-[10px]">
-        <thead>
-          <tr className={`border-b ${theme.borderSecondary} ${theme.tableHeaderBg} ${theme.textSecondary}`}>
-            <th className="px-3 py-1.5 font-medium">Tool</th>
-            <th className="px-3 py-1.5 font-medium">Current</th>
-            <th className="px-3 py-1.5 font-medium">Recommended</th>
-            <th className="px-3 py-1.5 font-medium text-right">Savings</th>
-          </tr>
-        </thead>
-        <tbody className={`divide-y ${theme.borderSecondary}`}>
-          {data.auditResults.perTool.map((tool, idx) => (
-            <tr key={idx} className={theme.textPrimary}>
-              <td className="px-3 py-1.5 font-medium">{tool.toolName}</td>
-              <td className="px-3 py-1.5 text-zinc-500">
-                {tool.currentPlan} <span className="text-[9px]">(${tool.currentMonthlySpending}/mo)</span>
-              </td>
-              <td className="px-3 py-1.5">
-                {tool.recommendedAction === 'keep' ? (
-                  <span className="inline-flex items-center px-1.5 py-0.5 rounded-full bg-zinc-500/10 text-zinc-500 text-[9px] font-medium border border-zinc-500/20">
-                    Optimal
-                  </span>
-                ) : (
-                  <span className="font-medium text-emerald-500">
-                    {tool.recommendedAction === 'downgrade' ? '↓' : '↑'} {tool.recommendedPlan}
-                  </span>
-                )}
-              </td>
-              <td className="px-3 py-1.5 text-right">
-                {tool.monthlySavings > 0 ? (
-                  <span className="text-emerald-500 font-medium">+${tool.monthlySavings}/mo</span>
-                ) : (
-                  <span className="text-zinc-500">-</span>
-                )}
-              </td>
+      <div>
+        <table className="w-full text-left border-collapse">
+          <thead className={theme.tableHeaderBg}>
+            <tr>
+              <th className={`px-5 py-3 text-[10px] font-bold uppercase tracking-wider ${theme.textMuted}`}>Tool</th>
+              <th className={`px-5 py-3 text-[10px] font-bold uppercase tracking-wider ${theme.textMuted}`}>Current Plan</th>
+              <th className={`px-5 py-3 text-[10px] font-bold uppercase tracking-wider ${theme.textMuted}`}>Target Plan</th>
+              <th className={`px-5 py-3 text-[10px] font-bold uppercase tracking-wider ${theme.textMuted} text-right`}>Optimized Cost</th>
+              <th className={`px-5 py-3 text-[10px] font-bold uppercase tracking-wider ${theme.textMuted} text-right`}>Savings</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-zinc-800/10">
+            {(data.auditResults?.perTool || []).map((tool, idx) => (
+              <tr key={idx} className={tool.recommendedAction !== 'keep' ? "bg-emerald-500/[0.02]" : ""}>
+                <td className="px-5 py-4">
+                  <p className={`text-xs font-bold ${theme.textPrimary}`}>{tool.toolName}</p>
+                </td>
+                <td className="px-5 py-4">
+                  <p className={`text-[10px] ${theme.textSecondary}`}>{tool.currentPlan}</p>
+                  <p className={`text-[9px] font-medium ${theme.textMuted}`}>(${tool.currentMonthlySpending.toLocaleString()}/mo)</p>
+                </td>
+                <td className="px-5 py-4">
+                  <p className={`text-[10px] ${theme.textSecondary}`}>{tool.recommendedPlan}</p>
+                </td>
+                <td className="px-5 py-4 text-right">
+                  <p className={`text-xs font-bold ${theme.textPrimary}`}>${tool.projectedMonthlyCost.toLocaleString()}</p>
+                </td>
+                <td className="px-5 py-4 text-right">
+                  {tool.monthlySavings > 0 ? (
+                    <p className="text-xs font-bold text-emerald-500">+{Math.round(tool.monthlySavings).toLocaleString()}</p>
+                  ) : (
+                    <p className={`text-[10px] font-medium ${theme.textMuted}`}>Optimal</p>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
 
 const PdfRecsBlock = ({ data, theme }: { data: ReportData, theme: ThemeConfig }) => {
-  const actionable = data.auditResults.perTool.filter(t => t.recommendedAction !== 'keep');
+  const perTool = data.auditResults?.perTool || [];
+  const actionable = perTool.filter(t => t.recommendedAction !== 'keep' && t.recommendedAction !== 'credits');
+  const creditBased = perTool.filter(t => t.recommendedAction === 'credits');
+  const allActionable = [...actionable, ...creditBased];
+
   return (
-    <div className={`rounded-xl border ${theme.borderPrimary} ${theme.cardBg} ${theme.spacing.card}`}>
-      <h3 className={`text-[10px] font-semibold uppercase tracking-wider ${theme.textPrimary} mb-2.5`}>
-        Operational Recommendations
+    <div className={`${theme.spacing.section}`}>
+      <h3 className={`text-[11px] font-bold uppercase tracking-widest ${theme.textPrimary} mb-4`}>
+        Optimization Roadmap
       </h3>
-      <div className="grid grid-cols-2 gap-2.5">
-        {actionable.map((tool, idx) => (
-          <div key={idx} className={`p-2.5 rounded-lg border ${theme.borderSecondary} ${theme.cardBgSecondary}`}>
-            <div className="flex justify-between items-start mb-1">
-              <span className={`text-[9px] font-medium px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500`}>
-                Action Required
-              </span>
-              <span className={`text-[9px] font-bold ${theme.textPrimary}`}>{tool.toolName}</span>
+      <div className="grid grid-cols-1 gap-3">
+        {allActionable.map((tool, idx) => (
+          <div key={idx} className={`p-4 rounded-xl border ${theme.borderPrimary} ${theme.cardBgSecondary}`}>
+            <div className="flex justify-between items-start mb-2">
+              <div className="flex items-center gap-2">
+                <span className={`text-[9px] font-bold px-2 py-0.5 rounded ${tool.recommendedAction === 'credits' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20'} uppercase tracking-wider`}>
+                  {tool.recommendedAction}
+                </span>
+                <span className={`text-sm font-bold ${theme.textPrimary}`}>{tool.toolName}</span>
+              </div>
+              <div className="text-right">
+                <span className="text-[10px] font-bold text-emerald-500">
+                  {tool.recommendedAction === 'credits' ? '20-30% Savings' : `+$${tool.monthlySavings.toLocaleString()}/mo`}
+                </span>
+              </div>
             </div>
             <p className={`text-[10px] leading-relaxed ${theme.textSecondary}`}>
               {tool.reason}
             </p>
           </div>
         ))}
-        {actionable.length === 0 && (
-          <div className={`col-span-2 text-xs ${theme.textMuted} text-center py-3`}>
-            All tools are currently optimized.
+        {allActionable.length === 0 && (
+          <div className={`text-xs ${theme.textMuted} text-center py-8 border border-dashed ${theme.borderPrimary} rounded-xl`}>
+            Your stack is fully optimized. No immediate actions required.
           </div>
         )}
       </div>
@@ -253,15 +252,19 @@ const PdfRecsBlock = ({ data, theme }: { data: ReportData, theme: ThemeConfig })
 export function PdfReport({ data, settings, isPreview = false, previewZoom }: PdfReportProps) {
   const theme = getThemeConfig(settings.theme, settings.chartColor, settings.compactMode);
 
-  // Define block weights (approximate % of A4 height they consume)
-  // Adjusted for single-page optimization
+  // Define dynamic block weights based on actual data length
+  const perTool = data.auditResults?.perTool || [];
+  const toolCount = perTool.length;
+  const actionableCount = perTool.filter(t => t.recommendedAction !== 'keep' && t.recommendedAction !== 'credits').length;
+  const creditCount = perTool.filter(t => t.recommendedAction === 'credits').length;
+
   const weights = {
-    cover: 0.10,
-    kpi: 0.12,
-    summary: 0.15,
-    charts: 0.22,
-    table: 0.20,
-    recs: 0.15
+    cover: 0.12,
+    kpi: 0.14,
+    summary: 0.15 + ((data.aiSummary || "").length / 1000) * 0.1, // Scale with text length
+    charts: 0.28,
+    table: 0.08 + (toolCount * 0.05), // Header + ~5% per row
+    recs: 0.06 + ((actionableCount + creditCount) * 0.08) // Header + ~8% per item
   };
 
   // Build the ordered list of enabled blocks
@@ -280,7 +283,7 @@ export function PdfReport({ data, settings, isPreview = false, previewZoom }: Pd
   let currentWeight = 0;
 
   activeBlocks.forEach(block => {
-    if (currentWeight + block.weight > 1.05 && currentPage.length > 0) {
+    if (currentWeight + block.weight > 0.85 && currentPage.length > 0) {
       pages.push(currentPage);
       currentPage = [block];
       currentWeight = block.weight;
@@ -298,11 +301,16 @@ export function PdfReport({ data, settings, isPreview = false, previewZoom }: Pd
     <div 
       id={isPreview ? undefined : "pdf-export-container"}
       // If it's a preview, we use zoom to scale it down.
-      className={isPreview ? "flex flex-col gap-6 w-[210mm] pdf-preview-zoom" : "fixed left-[9999px] top-0 pointer-events-none"} 
-      style={isPreview && previewZoom ? { zoom: previewZoom } as React.CSSProperties : undefined}
+      className={isPreview ? "flex flex-col gap-10 w-[210mm] pb-20" : "fixed left-[9999px] top-0 pointer-events-none w-[210mm]"} 
     >
       {pages.map((pageBlocks, pageIndex) => (
-        <PdfPage key={`page-${pageIndex}`} theme={theme} pageNumber={pageIndex + 1} includeFooter={true}>
+        <PdfPage 
+          key={`page-${pageIndex}`} 
+          theme={theme} 
+          pageNumber={pageIndex + 1} 
+          totalPages={pages.length}
+          includeFooter={true}
+        >
           {pageBlocks.map(block => block.render())}
         </PdfPage>
       ))}
