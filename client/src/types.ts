@@ -1,5 +1,5 @@
-export type Recommendation = "keep" | "upgrade" | "downgrade" | "switch" | "consolidate";
-export type SavingsCategory = "optimal" | "low" | "medium" | "high";
+export type Recommendation = "keep" | "upgrade" | "downgrade" | "switch" | "consolidate" | "credits";
+export type SavingsCategory = "optimal" | "low" | "medium" | "high" | "critical";
 
 export interface ToolAuditResult {
   toolName: string;
@@ -11,6 +11,7 @@ export interface ToolAuditResult {
   monthlySavings: number;
   annualSavings: number;
   reason: string;
+  credexEligible: boolean;
 }
 
 export interface AuditSummary {
@@ -27,9 +28,9 @@ export interface ReportData {
   summaryWasFallback: boolean;
 }
 
-export type PdfTheme = "dark-executive" | "light-corporate";
+export type PdfTheme = "dark" | "light";
 export type ChartColor = "blue" | "green" | "purple" | "orange" | "monochrome";
-export type PdfQuality = "standard" | "high";
+export type PdfQuality = "low" | "standard" | "high";
 
 export interface PdfExportSettings {
   theme: PdfTheme;
@@ -40,4 +41,13 @@ export interface PdfExportSettings {
   includeCover: boolean;
   showRecommendations: boolean;
   showAiSummary: boolean;
+}
+
+export interface ToolInput {
+  id: string;
+  toolName: string;
+  currentPlan: string;
+  seats: number;
+  monthlyCost: number;
+  usageIntensity?: "low" | "medium" | "high";
 }
