@@ -8,15 +8,18 @@ interface SummaryCardsProps {
 }
 
 export function SummaryCards({ summary }: SummaryCardsProps) {
-  const currentTotalMonthly = summary.perTool.reduce((acc, tool) => acc + tool.currentMonthlySpending, 0);
-  const optimizedTotalMonthly = summary.perTool.reduce((acc, tool) => acc + tool.projectedMonthlyCost, 0);
+  const perTool = summary?.perTool || [];
+  const currentTotalMonthly = perTool.reduce((acc, tool) => acc + (Number(tool.currentMonthlySpending) || 0), 0);
+  const optimizedTotalMonthly = perTool.reduce((acc, tool) => acc + (Number(tool.projectedMonthlyCost) || 0), 0);
 
   const formatCurrency = (value: number) => {
+    const safe = Number(value);
+    if (!isFinite(safe)) return '$—';
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
       maximumFractionDigits: 0,
-    }).format(value);
+    }).format(safe);
   };
 
   const cards = [
