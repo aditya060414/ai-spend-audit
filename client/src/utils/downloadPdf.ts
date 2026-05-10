@@ -8,7 +8,12 @@ import type { PdfQuality } from '../types';
  * @param filename The name of the downloaded PDF file.
  * @param quality The quality setting (standard/high) to optimize file size.
  */
-export async function downloadPdf(containerId: string, filename: string, qualityLevel: PdfQuality = 'standard'): Promise<void> {
+export async function downloadPdf(
+  containerId: string, 
+  filename: string, 
+  qualityLevel: PdfQuality = 'standard',
+  bgColor: string = '#ffffff'
+): Promise<void> {
   const container = document.getElementById(containerId);
   if (!container) {
     throw new Error(`Container with id '${containerId}' not found.`);
@@ -30,8 +35,8 @@ export async function downloadPdf(containerId: string, filename: string, quality
 
   const pdfWidth = pdf.internal.pageSize.getWidth();
 
-  const pixelRatio = qualityLevel === 'high' ? 2 : 1.5;
-  const imageQuality = qualityLevel === 'high' ? 0.95 : 0.8;
+  const pixelRatio = qualityLevel === 'high' ? 4 : qualityLevel === 'standard' ? 2 : 1.2;
+  const imageQuality = qualityLevel === 'low' ? 0.7 : 0.95;
 
   // Capture and add each page sequentially
   for (let i = 0; i < pages.length; i++) {
@@ -45,11 +50,11 @@ export async function downloadPdf(containerId: string, filename: string, quality
     const ratio = pageElement.offsetHeight / pageElement.offsetWidth;
     const imgHeightInMm = pdfWidth * ratio;
 
-    // Using toJpeg instead of toPng significantly reduces file size (often < 1MB)
+    // Capture page
     const imgData = await toJpeg(pageElement, {
       quality: imageQuality,
       pixelRatio: pixelRatio, 
-      backgroundColor: '#ffffff', // JPEG doesn't support transparency, must provide background
+      backgroundColor: bgColor,
       style: {
         transform: 'scale(1)',
         transformOrigin: 'top left',
@@ -62,7 +67,7 @@ export async function downloadPdf(containerId: string, filename: string, quality
       pdf.addPage();
     }
     
-    // Use natural image height to prevent distortion
+    // Add to PDF
     pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, imgHeightInMm, undefined, 'FAST');
   }
 
