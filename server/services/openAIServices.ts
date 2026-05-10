@@ -1,12 +1,14 @@
 import OpenAI from "openai";
 import type { AuditInput, AuditSummary } from "./auditEngine.js";
 
+// api key
 const client = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
 
   apiKey: process.env.OPENROUTER_API_KEY,
 });
 
+// prompt builder
 function buildPrompt(input: AuditInput, results: AuditSummary): string {
   const toolSummaries = results.perTool
     .map((tool) => {
@@ -88,6 +90,8 @@ Generate the summary now.
 `;
 }
 
+
+// if api fails still generates summary
 export function generateFallbackSummary(
   input: AuditInput,
   results: AuditSummary,
