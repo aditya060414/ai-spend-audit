@@ -6,9 +6,10 @@ import { cn } from '../lib/utils';
 
 interface HeroSectionProps {
   savingsCategory: SavingsCategory;
+  isEfficient?: boolean;
 }
 
-export function HeroSection({ savingsCategory }: HeroSectionProps) {
+export function HeroSection({ savingsCategory, isEfficient }: HeroSectionProps) {
   const getBadgeStyle = (category: SavingsCategory) => {
     switch (category) {
       case 'optimal':
@@ -18,6 +19,8 @@ export function HeroSection({ savingsCategory }: HeroSectionProps) {
       case 'medium':
       case 'high':
         return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+      case 'critical':
+        return 'bg-rose-500/10 text-rose-400 border-rose-500/20';
       default:
         return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
     }
@@ -29,6 +32,7 @@ export function HeroSection({ savingsCategory }: HeroSectionProps) {
       case 'low': return 'Low Optimization Opportunity';
       case 'medium': return 'Medium Optimization Opportunity';
       case 'high': return 'High Optimization Opportunity';
+      case 'critical': return 'Critical Savings Opportunity';
       default: return 'Analysis Complete';
     }
   };
@@ -46,16 +50,18 @@ export function HeroSection({ savingsCategory }: HeroSectionProps) {
           </div>
           <span className={cn(
             "px-2.5 py-1 text-xs font-medium rounded-full border",
-            getBadgeStyle(savingsCategory)
+            isEfficient ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : getBadgeStyle(savingsCategory)
           )}>
-            {getCategoryText(savingsCategory)}
+            {isEfficient ? 'Highly Efficient' : getCategoryText(savingsCategory)}
           </span>
         </div>
-        <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-gradient mb-2">
+        <h1 className="text-3xl xs:text-4xl md:text-5xl font-semibold tracking-tight text-gradient mb-2">
           AI Spend Audit Report
         </h1>
         <p className="text-zinc-400 text-lg">
-          Optimization insights and financial analysis for your AI tooling stack.
+          {isEfficient 
+            ? "Your AI stack is lean and optimized. Here is the full financial breakdown."
+            : "Optimization insights and financial analysis for your AI tooling stack."}
         </p>
       </motion.div>
     </div>
