@@ -10,11 +10,12 @@ import { SpendChartsSection } from './SpendChartsSection';
 import { RecommendationsSection } from './RecommendationsSection';
 import { downloadPdf } from '../utils/downloadPdf';
 import { PdfReport } from './pdf/PdfReport';
+import { getThemeConfig } from './pdf/theme';
 import { ExportModal } from './ExportModal';
 import { EnterpriseCTA } from './EnterpriseCTA';
-import { cn } from '../lib/utils';
 import { toast } from 'react-hot-toast';
 
+// 
 interface AccessLevel {
   isOwner: boolean;
   isLead: boolean;
@@ -31,7 +32,7 @@ export function ReportDashboard({ data, accessLevel: _accessLevel }: ReportDashb
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [exportSettings, setExportSettings] = useState<PdfExportSettings>({
-    theme: 'dark-executive',
+    theme: 'dark',
     chartColor: 'blue',
     quality: 'standard',
     compactMode: true,
@@ -47,18 +48,33 @@ export function ReportDashboard({ data, accessLevel: _accessLevel }: ReportDashb
     setIsGenerating(true);
     const toastId = toast.loading('Generating PDF report...');
 
-    setTimeout(async () => {
-      try {
-        await downloadPdf('pdf-export-container', `AI-Spend-Audit-${shareId}.pdf`);
-        toast.success('PDF downloaded successfully!', { id: toastId });
-      } catch (error) {
-        console.error('Failed to generate PDF:', error);
-        toast.error('Failed to generate PDF report.', { id: toastId });
-      } finally {
-        setIsGenerating(false);
-      }
-    }, 100);
+    try {
+      // Get the actual hex background color for the selected theme
+      const themeConfig = getThemeConfig(settings.theme, settings.chartColor, settings.compactMode);
+      
+      await downloadPdf(
+        'pdf-export-container', 
+        `AI-Spend-Audit-${shareId}.pdf`, 
+        settings.quality,
+        themeConfig.pageBgHex
+      );
+      toast.success('Report downloaded successfully!', { id: toastId });
+    } catch (error) {
+      console.error('Failed to generate PDF:', error);
+      toast.error('Failed to generate PDF report.', { id: toastId });
+    } finally {
+      setIsGenerating(false);
+    }
   }, [shareId]);
+
+  const handleShareOrExport = useCallback(() => {
+    // Lead capture is optional and only triggered on export/share
+    if (!_accessLevel?.isLead) {
+      window.dispatchEvent(new CustomEvent('trigger-lead-capture'));
+    }
+  }, [_accessLevel]);
+
+  const isHighSavings = auditResults.totalMonthlySavings > 500;
 
   return (
     <div className="min-h-screen bg-[#09090b] text-[#fafafa] selection:bg-emerald-500/30">
@@ -76,15 +92,18 @@ export function ReportDashboard({ data, accessLevel: _accessLevel }: ReportDashb
         data={data}
       />
       
-      <main className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+      <main className="relative max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 py-8 md:py-24">
         <div className="pb-10 bg-transparent">
-          <HeroSection savingsCategory={auditResults.savingsCategory} />
+          <HeroSection 
+            savingsCategory={auditResults.savingsCategory} 
+            isEfficient={!isHighSavings}
+          />
           
           <SummaryCards summary={auditResults} />
           
           <SpendChartsSection summary={auditResults} />
           
-          <div className={cn("transition-all duration-700", !_accessLevel?.isLead && !_accessLevel?.isOwner && "blur-md select-none pointer-events-none opacity-50")}>
+          <div>
             <RecommendationsSection tools={auditResults.perTool} />
 
             <ToolBreakdownTable tools={auditResults.perTool} />
@@ -94,24 +113,20 @@ export function ReportDashboard({ data, accessLevel: _accessLevel }: ReportDashb
             )}
           </div>
           
-          {!_accessLevel?.isLead && !_accessLevel?.isOwner && (
-            <div className="relative -mt-32 mb-20 z-10 text-center">
-              <div className="bg-zinc-900/80 backdrop-blur-md border border-zinc-800 p-10 rounded-3xl shadow-2xl max-w-xl mx-auto">
-                <h3 className="text-2xl font-bold text-zinc-100 mb-3">Unlock Full Audit Insights</h3>
-                <p className="text-zinc-400 mb-8">
-                  Get the detailed tool-by-tool breakdown and AI-powered recommendations to start saving.
-                </p>
-                <button 
-                  onClick={() => window.location.reload()} // This will trigger the LeadCaptureModal in ReportPage
-                  className="px-8 py-3.5 bg-emerald-500 hover:bg-emerald-400 text-[#09090b] font-bold rounded-xl shadow-lg shadow-emerald-500/20 transition-all"
-                >
-                  Unlock Report Now
-                </button>
-              </div>
+          {isHighSavings ? (
+            <HighSavingsCTA savings={auditResults.totalMonthlySavings} />
+          ) : (
+            <div className="mt-12 p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl text-center">
+              <h3 className="text-xl font-bold text-zinc-100 mb-2">You're spending efficiently!</h3>
+              <p className="text-zinc-400 mb-6">Your tool stack is well-optimized. Subscribe to our newsletter for more efficiency tips.</p>
+              <button 
+                onClick={() => toast.success('Newsletter coming soon!', { icon: '📧' })}
+                className="px-6 py-2.5 bg-zinc-100 hover:bg-white text-zinc-900 font-bold rounded-xl transition-all"
+              >
+                Get Weekly Updates
+              </button>
             </div>
           )}
-          
-          <HighSavingsCTA savings={auditResults.totalMonthlySavings} />
 
           {_accessLevel?.isHighValue && (
             <EnterpriseCTA />
@@ -120,7 +135,20 @@ export function ReportDashboard({ data, accessLevel: _accessLevel }: ReportDashb
         
         <ShareSection 
           shareId={shareId} 
-          onExportClick={() => setIsExportModalOpen(true)} 
+          onExportClick={() => {
+            if (!_accessLevel?.isLead) {
+              window.dispatchEvent(new CustomEvent('trigger-lead-capture'));
+            } else {
+              setIsExportModalOpen(true);
+            }
+          }} 
+          onShareClick={() => {
+            if (!_accessLevel?.isLead) {
+              window.dispatchEvent(new CustomEvent('trigger-lead-capture'));
+              return false; // Signal to block if possible
+            }
+            return true;
+          }}
           isGenerating={isGenerating}
         />
       </main>
