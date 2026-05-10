@@ -31,15 +31,10 @@ export function ReportPage() {
       const localData = JSON.parse(localStorage.getItem(`report_${shareId}`) || '{}');
       const currentAccess = {
         isOwner: !!localData.isOwner,
-        isLead: !!localData.isLead || !response.data.isGated, // If not gated, they have lead access
+        isLead: !!localData.isLead || !!response.data.isLeadCaptured, 
         isHighValue: !!localData.isHighValue,
       };
       setAccessLevel(currentAccess);
-      
-      // Show lead capture if the report is gated on the server
-      if (response.data.isGated && !currentAccess.isLead) {
-        setShowLeadCapture(true);
-      }
 
     } catch (err: any) {
       console.error(err);
@@ -54,6 +49,20 @@ export function ReportPage() {
       fetchReport();
     }
   }, [shareId]);
+
+  // Removed automatic lead capture timer to make it completely optional.
+  // Lead capture is now only triggered by user actions (Share/Export).
+
+  // Listen for manual lead capture triggers (from Share/Export)
+  useEffect(() => {
+    const handleTrigger = () => {
+      if (!accessLevel.isLead) {
+        setShowLeadCapture(true);
+      }
+    };
+    window.addEventListener('trigger-lead-capture', handleTrigger);
+    return () => window.removeEventListener('trigger-lead-capture', handleTrigger);
+  }, [accessLevel.isLead]);
 
   const handleLeadCaptured = (isHighValue: boolean) => {
     const newAccess = { isOwner: true, isLead: true, isHighValue };
@@ -92,7 +101,18 @@ export function ReportPage() {
   }
 
   return (
-    <>
+    <div className="min-h-screen bg-[#09090b]">
+      {/* Navigation Header */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        <button 
+          onClick={() => navigate('/')}
+          className="group inline-flex items-center gap-2 text-zinc-500 hover:text-zinc-100 transition-colors text-sm font-medium"
+        >
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          Back to Audit
+        </button>
+      </div>
+
       <ReportDashboard data={data} accessLevel={accessLevel} />
       
       {showLeadCapture && data && shareId && (
@@ -103,6 +123,6 @@ export function ReportPage() {
           onClose={() => setShowLeadCapture(false)}
         />
       )}
-    </>
+    </div>
   );
 }
