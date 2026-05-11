@@ -55,7 +55,7 @@ export function SpendChartsSection({ summary }: SpendChartsSectionProps) {
       <div className="lg:col-span-3 glass-card rounded-xl p-6">
         <div className="mb-5">
           <h2 className="text-base font-semibold text-zinc-100">Spend Comparison</h2>
-          <p className="text-xs text-zinc-500 mt-0.5">Current vs optimized cost per tool</p>
+          <p className="text-xs text-zinc-400 mt-0.5">Current vs optimized cost per tool</p>
         </div>
         <div className="h-52">
           <ResponsiveContainer width="100%" height="100%" minWidth={0}>
@@ -76,10 +76,10 @@ export function SpendChartsSection({ summary }: SpendChartsSectionProps) {
       <div className="lg:col-span-2 glass-card rounded-xl p-5 sm:p-6">
         <div className="mb-5">
           <h2 className="text-base font-semibold text-zinc-100">Savings Distribution</h2>
-          <p className="text-xs text-zinc-500 mt-0.5">Monthly savings breakdown by tool</p>
+          <p className="text-xs text-zinc-400 mt-0.5">Monthly savings breakdown by tool</p>
         </div>
         {pieData.length === 0 ? (
-          <div className="h-52 flex items-center justify-center text-zinc-500 text-sm text-center px-4">
+          <div className="h-52 flex items-center justify-center text-zinc-400 text-sm text-center px-4">
             No optimization savings identified yet.
           </div>
         ) : (

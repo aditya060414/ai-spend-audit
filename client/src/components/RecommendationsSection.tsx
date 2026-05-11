@@ -68,7 +68,7 @@ export function RecommendationsSection({ tools }: RecommendationsSectionProps) {
                 <div className="flex items-start justify-between mb-3">
                   <div>
                     <span className="text-sm font-semibold text-zinc-100">{tool.toolName}</span>
-                    <span className="text-xs text-zinc-500 ml-2">{tool.currentPlan}</span>
+                    <span className="text-xs text-zinc-400 ml-2">{tool.currentPlan}</span>
                   </div>
                   <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${cfg.bgColor} ${cfg.color} ${cfg.borderColor}`}>
                     <Icon className="w-3 h-3" />
@@ -78,7 +78,7 @@ export function RecommendationsSection({ tools }: RecommendationsSectionProps) {
 
                 {tool.recommendedAction !== 'keep' && tool.recommendedAction !== 'credits' && (
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xs text-zinc-500">→</span>
+                    <span className="text-xs text-zinc-400">→</span>
                     <span className="text-xs font-medium text-zinc-300">{tool.recommendedPlan}</span>
                   </div>
                 )}
@@ -90,12 +90,12 @@ export function RecommendationsSection({ tools }: RecommendationsSectionProps) {
                 {(tool.monthlySavings ?? 0) > 0 && (
                   <div className="flex items-center gap-3 pt-3 border-t border-zinc-800/60">
                     <div>
-                      <p className="text-[10px] text-zinc-500 uppercase tracking-wider">Monthly Savings</p>
+                      <p className="text-[10px] text-zinc-400 uppercase tracking-wider">Monthly Savings</p>
                       <p className="text-sm font-bold text-emerald-400">+${(tool.monthlySavings ?? 0).toLocaleString()}</p>
                     </div>
                     <div className="w-px h-8 bg-zinc-800" />
                     <div>
-                      <p className="text-[10px] text-zinc-500 uppercase tracking-wider">Annual Savings</p>
+                      <p className="text-[10px] text-zinc-400 uppercase tracking-wider">Annual Savings</p>
                       <p className="text-sm font-bold text-emerald-400">+${(tool.annualSavings ?? 0).toLocaleString()}</p>
                     </div>
                   </div>
@@ -122,7 +122,7 @@ export function RecommendationsSection({ tools }: RecommendationsSectionProps) {
                 <div className="flex items-start justify-between mb-3">
                   <div>
                     <span className="text-sm font-semibold text-zinc-100">{tool.toolName}</span>
-                    <span className="text-xs text-zinc-500 ml-2">{tool.currentPlan}</span>
+                    <span className="text-xs text-zinc-400 ml-2">{tool.currentPlan}</span>
                   </div>
                   <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${cfg.bgColor} ${cfg.color} ${cfg.borderColor}`}>
                     <Icon className="w-3 h-3" />
@@ -137,7 +137,7 @@ export function RecommendationsSection({ tools }: RecommendationsSectionProps) {
                 <div className="flex items-center justify-between pt-3 border-t border-zinc-800/60">
                   <div className="flex items-center gap-3">
                     <div>
-                      <p className="text-[10px] text-zinc-500 uppercase tracking-wider">Potential Savings</p>
+                      <p className="text-[10px] text-zinc-400 uppercase tracking-wider">Potential Savings</p>
                       <p className="text-sm font-bold text-emerald-400">20-30% off</p>
                     </div>
                   </div>

@@ -37,7 +37,7 @@ const SidebarContent = ({ settings, setSettings, setIsSidebarOpen, onGenerate, t
     <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
       {/* Appearance */}
       <section>
-        <h3 className="text-[10px] font-bold text-zinc-500 mb-4 uppercase tracking-widest flex items-center gap-2">
+        <h3 className="text-[10px] font-bold text-zinc-400 mb-4 uppercase tracking-widest flex items-center gap-2">
           <Palette className="w-3 h-3" /> Appearance
         </h3>
         <div className="grid gap-2">
@@ -62,7 +62,7 @@ const SidebarContent = ({ settings, setSettings, setIsSidebarOpen, onGenerate, t
 
       {/* Structure */}
       <section>
-        <h3 className="text-[10px] font-bold text-zinc-500 mb-4 uppercase tracking-widest flex items-center gap-2">
+        <h3 className="text-[10px] font-bold text-zinc-400 mb-4 uppercase tracking-widest flex items-center gap-2">
           <Layout className="w-3 h-3" /> Structure
         </h3>
         <div className="space-y-2">
@@ -91,7 +91,7 @@ const SidebarContent = ({ settings, setSettings, setIsSidebarOpen, onGenerate, t
 
       {/* Quality */}
       <section>
-        <h3 className="text-[10px] font-bold text-zinc-500 mb-4 uppercase tracking-widest flex items-center gap-2">
+        <h3 className="text-[10px] font-bold text-zinc-400 mb-4 uppercase tracking-widest flex items-center gap-2">
           <Zap className="w-3 h-3" /> Quality
         </h3>
         <div className="grid grid-cols-3 gap-2 mb-4">
@@ -101,7 +101,7 @@ const SidebarContent = ({ settings, setSettings, setIsSidebarOpen, onGenerate, t
               onClick={() => setSettings({ ...settings, quality: q })}
               className={cn(
                 "py-2 rounded-lg border text-[10px] font-bold capitalize transition-all",
-                settings.quality === q ? "bg-zinc-800 border-zinc-600 text-zinc-100" : "border-zinc-800 text-zinc-500"
+                settings.quality === q ? "bg-zinc-800 border-zinc-600 text-zinc-100" : "border-zinc-800 text-zinc-400 hover:text-zinc-200"
               )}
             >
               {q}
@@ -207,7 +207,7 @@ export function ExportModal({ isOpen, onClose, onGenerate, defaultSettings, data
                 <div className="flex items-center gap-2 sm:gap-4">
                   {/* Zoom Controls */}
                   <div className="flex items-center gap-1 sm:gap-2 px-1.5 py-1 bg-zinc-900/80 border border-zinc-800 rounded-lg">
-                    <button onClick={handleZoomOut} className="p-1 text-zinc-500 hover:text-zinc-100 transition-colors">
+                    <button onClick={handleZoomOut} className="p-1 text-zinc-400 hover:text-zinc-100 transition-colors">
                       <ZoomOut className="w-3.5 h-3.5" />
                     </button>
                     
@@ -217,10 +217,10 @@ export function ExportModal({ isOpen, onClose, onGenerate, defaultSettings, data
                         onChange={(e) => setZoomLevel(Math.min(Math.max(parseInt(e.target.value) / 100 || 0.1, 0.1), 2))}
                         className="w-8 bg-transparent text-[10px] font-mono text-zinc-300 text-center focus:outline-none"
                       />
-                      <span className="text-[10px] font-mono text-zinc-500">%</span>
+                      <span className="text-[10px] font-mono text-zinc-400">%</span>
                     </div>
 
-                    <button onClick={handleZoomIn} className="p-1 text-zinc-500 hover:text-zinc-100 transition-colors">
+                    <button onClick={handleZoomIn} className="p-1 text-zinc-400 hover:text-zinc-100 transition-colors">
                       <ZoomIn className="w-3.5 h-3.5" />
                     </button>
                     
@@ -230,18 +230,18 @@ export function ExportModal({ isOpen, onClose, onGenerate, defaultSettings, data
                       onClick={() => setZoomLevel(1)} 
                       className={cn(
                         "text-[9px] font-bold px-1 py-0.5 rounded transition-colors hidden xs:block",
-                        zoomLevel === 1 ? "bg-emerald-500/20 text-emerald-400" : "text-zinc-500"
+                        zoomLevel === 1 ? "bg-emerald-500/20 text-emerald-400" : "text-zinc-400"
                       )}
                     >
                       100%
                     </button>
                     
-                    <button onClick={handleZoomReset} className="p-1 text-zinc-500 hover:text-zinc-100 transition-colors">
+                    <button onClick={handleZoomReset} className="p-1 text-zinc-400 hover:text-zinc-100 transition-colors">
                       <RotateCcw className="w-3.5 h-3.5" />
                     </button>
                   </div>
 
-                  <button onClick={onClose} className="p-2 text-zinc-500 hover:text-zinc-100 transition-colors">
+                  <button onClick={onClose} className="p-2 text-zinc-400 hover:text-zinc-100 transition-colors">
                     <X className="w-6 h-6" />
                   </button>
                 </div>

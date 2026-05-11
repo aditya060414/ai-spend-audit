@@ -60,7 +60,7 @@ export function ShareSection({ shareId, onExportClick, onShareClick, isGeneratin
       {/* Share URL display + copy button */}
       <div className="flex items-center gap-4 w-full md:w-auto">
         <div className="flex-1 md:flex-none flex items-center gap-3 bg-zinc-900/50 border border-zinc-800 rounded-lg px-4 py-2">
-          <Link className="w-4 h-4 text-zinc-500 shrink-0" />
+          <Link className="w-4 h-4 text-zinc-400 shrink-0" />
           <span className="text-sm text-zinc-400 truncate max-w-[200px] md:max-w-xs">{shareUrl}</span>
         </div>
         <button

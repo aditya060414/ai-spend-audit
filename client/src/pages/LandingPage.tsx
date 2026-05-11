@@ -183,7 +183,7 @@ export function LandingPage() {
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 lg:pt-20">
         {/* Header */}
         <div className="text-center mb-10 lg:mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-800/50 border border-zinc-700/50 text-[10px] lg:text-xs font-medium text-zinc-300 mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-800/50 border border-zinc-700/50 text-[10px] lg:text-xs font-medium text-zinc-400 mb-6">
             <Wand2 className="w-3.5 h-3.5 text-emerald-400" />
             <span>AI-Powered Financial Optimization</span>
           </div>
@@ -207,10 +207,11 @@ export function LandingPage() {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-6">
               <div>
-                <label className="block text-sm font-medium text-zinc-400 mb-2">
+                <label htmlFor="teamSize" className="block text-sm font-medium text-zinc-400 mb-2">
                   Total Team Size
                 </label>
                 <input
+                  id="teamSize"
                   type="number"
                   min="1"
                   value={teamSize}
@@ -220,11 +221,12 @@ export function LandingPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-zinc-400 mb-2">
+                <label htmlFor="useCases" className="block text-sm font-medium text-zinc-400 mb-2">
                   Primary Use Case
                 </label>
                 <div className="relative">
                   <select
+                    id="useCases"
                     value={useCases}
                     onChange={(e) => setUseCases(e.target.value)}
                     className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2.5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 appearance-none transition-colors"
@@ -288,7 +290,7 @@ export function LandingPage() {
               ) : (
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 md:gap-10 w-full md:w-auto">
                   <div className="text-center sm:text-left">
-                    <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5">
+                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1.5">
                       Monthly Spend
                     </p>
                     <p className="text-2xl sm:text-3xl font-bold text-zinc-100 tabular-nums">
@@ -297,7 +299,7 @@ export function LandingPage() {
                   </div>
                   <div className="h-10 w-px bg-zinc-800 hidden sm:block"></div>
                   <div className="text-center sm:text-left">
-                    <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5">
+                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1.5">
                       Annual Run Rate
                     </p>
                     <p className="text-2xl sm:text-3xl font-bold text-zinc-100 tabular-nums">
@@ -342,7 +344,7 @@ export function LandingPage() {
                     </>
                   )}
                 </button>
-                <p className="text-[11px] text-zinc-500 mt-3 flex items-center gap-1.5">
+                <p className="text-[11px] text-zinc-400 mt-3 flex items-center gap-1.5">
                   <ShieldCheck className="w-3 h-3" /> Secure and confidential.
                 </p>
               </div>

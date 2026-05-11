@@ -106,7 +106,7 @@ export function ReportPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <button 
           onClick={() => navigate('/')}
-          className="group inline-flex items-center gap-2 text-zinc-500 hover:text-zinc-100 transition-colors text-sm font-medium"
+          className="group inline-flex items-center gap-2 text-zinc-400 hover:text-zinc-100 transition-colors text-sm font-medium"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           Back to Audit

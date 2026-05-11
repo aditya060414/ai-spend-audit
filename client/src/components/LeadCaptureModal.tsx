@@ -79,7 +79,7 @@ export function LeadCaptureModal({
           {step !== "type-select" && (
             <button
               onClick={() => setStep("type-select")}
-              className="absolute top-4 left-4 flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+              className="absolute top-4 left-4 flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-200 transition-colors"
             >
               <ChevronLeft className="w-3.5 h-3.5" /> Back
             </button>
@@ -87,7 +87,7 @@ export function LeadCaptureModal({
 
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800 rounded-lg transition-colors"
+            className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 rounded-lg transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -129,7 +129,7 @@ export function LeadCaptureModal({
                         <p className="text-sm font-semibold text-zinc-100">
                           Individual
                         </p>
-                        <p className="text-[11px] text-zinc-500 mt-0.5">
+                        <p className="text-[11px] text-zinc-400 mt-0.5">
                           Just me
                         </p>
                       </div>
@@ -146,7 +146,7 @@ export function LeadCaptureModal({
                         <p className="text-sm font-semibold text-zinc-100">
                           Company
                         </p>
-                        <p className="text-[11px] text-zinc-500 mt-0.5">
+                        <p className="text-[11px] text-zinc-400 mt-0.5">
                           Team / org
                         </p>
                       </div>
@@ -172,10 +172,11 @@ export function LeadCaptureModal({
                     <p className="text-sm text-zinc-400 mb-5">
                       We"ll email you the full audit breakdown instantly.
                     </p>
-                    <label className="block text-xs font-medium text-zinc-500 mb-1.5 uppercase tracking-wider">
+                    <label htmlFor="lead-email" className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">
                       Your Email *
                     </label>
                     <input
+                      id="lead-email"
                       type="email"
                       required
                       value={email}
@@ -244,10 +245,11 @@ export function LeadCaptureModal({
                     </p>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-zinc-500 mb-1.5 uppercase tracking-wider">
+                    <label htmlFor="company-email" className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">
                       Work Email *
                     </label>
                     <input
+                      id="company-email"
                       type="email"
                       required
                       value={email}
@@ -257,10 +259,11 @@ export function LeadCaptureModal({
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-zinc-500 mb-1.5 uppercase tracking-wider">
+                    <label htmlFor="company-name" className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">
                       Company Name *
                     </label>
                     <input
+                      id="company-name"
                       type="text"
                       required
                       value={companyName}
@@ -271,10 +274,11 @@ export function LeadCaptureModal({
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-zinc-500 mb-1.5 uppercase tracking-wider">
+                      <label htmlFor="role" className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">
                         Your Role
                       </label>
                       <input
+                        id="role"
                         type="text"
                         value={role}
                         onChange={(e) => setRole(e.target.value)}
@@ -283,10 +287,11 @@ export function LeadCaptureModal({
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-zinc-500 mb-1.5 uppercase tracking-wider">
+                      <label htmlFor="team-size" className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">
                         Team Size
                       </label>
                       <input
+                        id="team-size"
                         type="number"
                         value={teamSize}
                         onChange={(e) => setTeamSize(e.target.value)}

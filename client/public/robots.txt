@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ai-spend-audit-user.vercel.app/sitemap.xml

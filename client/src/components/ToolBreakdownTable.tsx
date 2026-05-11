@@ -108,7 +108,7 @@ export function ToolBreakdownTable({ tools }: ToolBreakdownTableProps) {
                     {formatCurrency(tool.projectedMonthlyCost)}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <span className={tool.monthlySavings > 0 ? "text-emerald-400 font-medium" : "text-zinc-500"}>
+                    <span className={tool.monthlySavings > 0 ? "text-emerald-400 font-medium" : "text-zinc-400"}>
                       {tool.monthlySavings > 0 ? `+${formatCurrency(tool.monthlySavings)}` : '-'}
                     </span>
                   </td>

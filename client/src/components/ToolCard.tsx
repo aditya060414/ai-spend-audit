@@ -36,11 +36,11 @@ export function ToolCard({
         "will-change-transform",
       )}
     >
-      <div className="col-span-1 sm:col-span-2 lg:col-span-3">
-        <label className="block text-[10px] lg:text-xs font-semibold text-zinc-500 mb-1.5 uppercase tracking-wider">
+        <label htmlFor={`toolName-${tool.id}`} className="block text-[10px] lg:text-xs font-semibold text-zinc-400 mb-1.5 uppercase tracking-wider">
           Tool Name
         </label>
         <input
+          id={`toolName-${tool.id}`}
           type="text"
           list={`tool-suggestions-${tool.id}`}
           placeholder="e.g. Cursor, Claude…"
@@ -54,11 +54,11 @@ export function ToolCard({
           ))}
         </datalist>
       </div>
-      <div className="col-span-1 lg:col-span-2">
-        <label className="block text-[10px] lg:text-xs font-semibold text-zinc-500 mb-1.5 uppercase tracking-wider">
+        <label htmlFor={`currentPlan-${tool.id}`} className="block text-[10px] lg:text-xs font-semibold text-zinc-400 mb-1.5 uppercase tracking-wider">
           Plan
         </label>
         <input
+          id={`currentPlan-${tool.id}`}
           type="text"
           list={`plan-suggestions-${tool.id}`}
           placeholder="e.g. Pro, Business…"
@@ -82,11 +82,11 @@ export function ToolCard({
           })()}
         </datalist>
       </div>
-      <div className="col-span-1 lg:col-span-2">
-        <label className="block text-[10px] lg:text-xs font-semibold text-zinc-500 mb-1.5 uppercase tracking-wider">
+        <label htmlFor={`seats-${tool.id}`} className="block text-[10px] lg:text-xs font-semibold text-zinc-400 mb-1.5 uppercase tracking-wider">
           Seats
         </label>
         <input
+          id={`seats-${tool.id}`}
           type="number"
           min="1"
           value={tool.seats}
@@ -96,11 +96,11 @@ export function ToolCard({
           className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2.5 lg:py-2 text-sm text-zinc-100 focus:outline-none focus:border-zinc-600 transition-colors"
         />
       </div>
-      <div className="col-span-1 lg:col-span-2">
-        <label className="block text-[10px] lg:text-xs font-semibold text-zinc-500 mb-1.5 uppercase tracking-wider">
+        <label htmlFor={`monthlyCost-${tool.id}`} className="block text-[10px] lg:text-xs font-semibold text-zinc-400 mb-1.5 uppercase tracking-wider">
           Cost/mo ($)
         </label>
         <input
+          id={`monthlyCost-${tool.id}`}
           type="number"
           min="0"
           value={tool.monthlyCost || ""}
@@ -111,7 +111,7 @@ export function ToolCard({
         />
       </div>
       <div className="col-span-1 sm:col-span-2 lg:col-span-2">
-        <label className="block text-[10px] lg:text-xs font-semibold text-zinc-500 mb-1.5 uppercase tracking-wider">
+        <label className="block text-[10px] lg:text-xs font-semibold text-zinc-400 mb-1.5 uppercase tracking-wider">
           Intensity
         </label>
         <div className="flex p-1 bg-zinc-900 border border-zinc-800 rounded-lg h-[38px] lg:h-[36px]">
@@ -124,7 +124,7 @@ export function ToolCard({
                 "flex-1 flex items-center justify-center text-[10px] font-bold uppercase rounded-md transition-all",
                 (tool.usageIntensity || "medium") === level
                   ? "bg-zinc-800 text-emerald-400 shadow-sm"
-                  : "text-zinc-500 hover:text-zinc-300"
+                  : "text-zinc-400 hover:text-zinc-200"
               )}
             >
               {level === "medium" ? "Med" : level.charAt(0).toUpperCase() + level.slice(1)}
@@ -136,7 +136,7 @@ export function ToolCard({
         <button
           type="button"
           onClick={() => onRemove(tool.id)}
-          className="p-2.5 text-zinc-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors w-full lg:w-auto flex items-center justify-center border border-zinc-800 lg:border-none"
+          className="p-2.5 text-zinc-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors w-full lg:w-auto flex items-center justify-center border border-zinc-800 lg:border-none"
           title="Remove tool"
         >
           <Trash2 className="w-4 h-4 lg:w-3.5 lg:h-3.5" />
