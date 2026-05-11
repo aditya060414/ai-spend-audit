@@ -16,7 +16,10 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: [
+      process.env.CLIENT_URL || "http://localhost:5173",
+      "https://ai-spend-audit-client.vercel.app"
+    ],
     credentials: true,
   }),
 );
