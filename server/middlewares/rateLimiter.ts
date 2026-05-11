@@ -1,5 +1,5 @@
 import rateLimit from "express-rate-limit";
-import { error } from "node:console";
+
 
 export const auditLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
