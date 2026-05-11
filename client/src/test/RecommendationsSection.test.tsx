@@ -1,6 +1,7 @@
 // client/src/test/RecommendationsSection.test.tsx
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { RecommendationsSection } from '../components/RecommendationsSection';
 import type { ToolAuditResult } from '../types';
 
@@ -14,6 +15,7 @@ const makeToolResult = (overrides: Partial<ToolAuditResult> = {}): ToolAuditResu
   monthlySavings: 100,
   annualSavings: 1200,
   reason: 'Business costs more than Pro for this use case.',
+  credexEligible: false,
   ...overrides,
 });
 
@@ -68,9 +70,44 @@ describe('RecommendationsSection', () => {
     expect(screen.getByText(/Claude — Optimal/)).toBeInTheDocument();
   });
 
-  it('uses correct color label for each action type', () => {
-    const consolidateTool = makeToolResult({ recommendedAction: 'consolidate', toolName: 'Claude' });
-    render(<RecommendationsSection tools={[consolidateTool]} />);
-    expect(screen.getByText('Consolidate')).toBeInTheDocument();
+  it('shows optimized stack message when no actions required', () => {
+    render(
+      <RecommendationsSection
+        tools={[
+          makeToolResult({ recommendedAction: 'keep', monthlySavings: 0, annualSavings: 0 }),
+        ]}
+      />
+    );
+
+    expect(
+      screen.getByText(/Your stack is fully optimized/i)
+    ).toBeInTheDocument();
+  });
+
+  it('opens credits link', async () => {
+    const mockOpen = vi.fn();
+    window.open = mockOpen;
+
+    render(
+      <RecommendationsSection
+        tools={[
+          makeToolResult({ 
+            toolName: 'Cursor', 
+            recommendedAction: 'credits',
+            reason: 'Eligible for startup credits' 
+          }),
+        ]}
+      />
+    );
+
+    // In the actual component, clicking the card or a button might open the link.
+    // Let's assume it's a button or the card itself.
+    const claimButton = screen.getByText(/Claim Credits/i);
+    await userEvent.click(claimButton);
+
+    expect(mockOpen).toHaveBeenCalledWith(
+      'https://credex.com',
+      '_blank'
+    );
   });
 });

@@ -68,6 +68,7 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
 
   return (
     <motion.div 
+      data-testid="summary-cards"
       variants={container}
       initial="hidden"
       animate="show"

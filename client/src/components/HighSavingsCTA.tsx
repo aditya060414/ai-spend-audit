@@ -1,6 +1,7 @@
 
 import { motion } from 'framer-motion';
 import { Calendar } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 interface HighSavingsCTAProps {
   savings: number;
@@ -26,10 +27,16 @@ export function HighSavingsCTA({ savings }: HighSavingsCTAProps) {
       </div>
       
       <div className="flex items-center gap-3 w-full md:w-auto shrink-0">
-        <button className="flex items-center justify-center gap-2 px-5 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700 transition-colors w-full md:w-auto">
+        <button 
+          onClick={() => toast.success('Strategic roadmap coming soon!', { icon: '📊' })}
+          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700 transition-colors w-full md:w-auto"
+        >
           Learn More
         </button>
-        <button className="flex items-center justify-center gap-2 px-5 py-2.5 bg-zinc-100 hover:bg-white text-zinc-900 rounded-lg font-medium transition-colors w-full md:w-auto shadow-sm">
+        <button 
+          onClick={() => toast.success('Consultation booking is currently being updated. Please check back shortly.', { icon: '🗓️' })}
+          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-zinc-100 hover:bg-white text-zinc-900 rounded-lg font-medium transition-colors w-full md:w-auto shadow-sm"
+        >
           <Calendar className="w-4 h-4" />
           Schedule Consultation
         </button>

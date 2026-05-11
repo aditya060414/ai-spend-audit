@@ -19,6 +19,7 @@ const mockSummary: AuditSummary = {
       monthlySavings: 200,
       annualSavings: 2400,
       reason: 'Downgrade saves money.',
+      credexEligible: false,
     },
     {
       toolName: 'Claude',
@@ -30,6 +31,7 @@ const mockSummary: AuditSummary = {
       monthlySavings: 500,
       annualSavings: 6000,
       reason: 'Overlapping tools.',
+      credexEligible: false,
     },
   ],
 };

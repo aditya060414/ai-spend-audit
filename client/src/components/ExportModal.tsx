@@ -227,7 +227,11 @@ export function ExportModal({ isOpen, onClose, onGenerate, defaultSettings, data
               {/* PDF Canvas */}
               <div className="flex-1 overflow-auto bg-[#050507] custom-scrollbar p-6 md:p-12">
                 <div className="min-w-fit flex justify-center pb-20">
-                  <div className="origin-top transition-transform duration-200 shadow-2xl" style={{ transform: `scale(${zoomLevel})` }}>
+                  <div 
+                    data-testid="pdf-preview"
+                    className="origin-top transition-transform duration-200 shadow-2xl" 
+                    style={{ transform: `scale(${zoomLevel})` }}
+                  >
                     <PdfReport data={data} settings={settings} isPreview={true} previewZoom={1} />
                   </div>
                 </div>

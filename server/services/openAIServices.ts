@@ -1,12 +1,17 @@
 import OpenAI from "openai";
 import type { AuditInput, AuditSummary } from "./auditEngine.js";
 
-// api key
-const client = new OpenAI({
-  baseURL: "https://openrouter.ai/api/v1",
+let client: OpenAI | null = null;
 
-  apiKey: process.env.OPENROUTER_API_KEY,
-});
+function getClient(): OpenAI {
+  if (!client) {
+    client = new OpenAI({
+      baseURL: "https://openrouter.ai/api/v1",
+      apiKey: process.env.OPENROUTER_API_KEY || "missing-key",
+    });
+  }
+  return client;
+}
 
 // prompt builder
 function buildPrompt(input: AuditInput, results: AuditSummary): string {
@@ -137,7 +142,8 @@ export async function generateAISummary(
   }
 
   try {
-    const response = await client.chat.completions.create({
+    const ai = getClient();
+    const response = await ai.chat.completions.create({
       model: "google/gemini-2.5-flash-lite",
 
       temperature: 0.4,

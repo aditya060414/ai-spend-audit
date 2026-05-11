@@ -1,22 +1,13 @@
 // client/src/test/LeadCaptureModal.test.tsx
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LeadCaptureModal } from '../components/LeadCaptureModal';
+import api from '../lib/api';
 
-// Mock framer-motion so AnimatePresence renders children immediately in tests
-vi.mock('framer-motion', () => ({
-  motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    form: ({ children, ...props }: any) => <form {...props}>{children}</form>,
-  },
-  AnimatePresence: ({ children }: any) => <>{children}</>,
-}));
-
-// Mock axios
-vi.mock('axios', () => ({
+// Mock API
+vi.mock('../lib/api', () => ({
   default: {
-    create: vi.fn().mockReturnThis(),
     post: vi.fn().mockResolvedValue({ data: { isHighValue: false } }),
   },
 }));
@@ -149,5 +140,60 @@ describe('LeadCaptureModal — company form', () => {
   it('shows a Back link and returns to type selector', async () => {
     await userEvent.click(screen.getByText(/Back/));
     expect(screen.getByText('Individual')).toBeInTheDocument();
+  });
+
+  it('submits individual lead form', async () => {
+    // Navigate to individual step
+    await userEvent.click(screen.getByText(/Back/));
+    await userEvent.click(screen.getByText('Individual'));
+
+    vi.mocked(api.post).mockResolvedValueOnce({
+      data: { isHighValue: false },
+    });
+
+    await userEvent.type(
+      screen.getByPlaceholderText(/you@email.com/i),
+      'test@example.com'
+    );
+
+    await userEvent.click(
+      screen.getByText(/Send My Report/i)
+    );
+
+    await waitFor(() => {
+      expect(api.post).toHaveBeenCalledWith('/api/leads', expect.objectContaining({
+        email: 'test@example.com'
+      }));
+      expect(defaultProps.onSuccess).toHaveBeenCalledWith(false);
+    });
+  });
+
+  it('submits company lead form', async () => {
+    // Navigate to company step (we are currently in company step due to beforeEach in Suite 3)
+    vi.mocked(api.post).mockResolvedValueOnce({
+      data: { isHighValue: true },
+    });
+
+    await userEvent.type(
+      screen.getByPlaceholderText(/you@company.com/i),
+      'cto@acme.com'
+    );
+
+    await userEvent.type(
+      screen.getByPlaceholderText(/Acme Corp/i),
+      'Acme'
+    );
+
+    await userEvent.click(
+      screen.getByText(/Get Enterprise Report/i)
+    );
+
+    await waitFor(() => {
+      expect(api.post).toHaveBeenCalledWith('/api/leads', expect.objectContaining({
+        email: 'cto@acme.com',
+        companyName: 'Acme'
+      }));
+      expect(defaultProps.onSuccess).toHaveBeenCalledWith(true);
+    });
   });
 });

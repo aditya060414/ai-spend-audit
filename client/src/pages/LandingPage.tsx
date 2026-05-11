@@ -310,6 +310,7 @@ export function LandingPage() {
 
               <div className="w-full md:w-auto shrink-0 flex flex-col items-center md:items-end">
                 <button
+                  data-testid="analyze-button"
                   type="submit"
                   disabled={isSubmitting || !isValid}
                   className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-zinc-100 hover:bg-white text-zinc-900 text-sm font-bold rounded-xl shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed group"

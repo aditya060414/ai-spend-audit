@@ -20,7 +20,7 @@ export function RecommendationsSection({ tools }: RecommendationsSectionProps) {
   const creditBased = tools.filter(t => t.recommendedAction === 'credits');
   const optimal    = tools.filter(t => t.recommendedAction === 'keep');
 
-  if (actionable.length === 0) {
+  if (actionable.length === 0 && creditBased.length === 0) {
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
