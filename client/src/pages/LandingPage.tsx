@@ -104,7 +104,7 @@ export function LandingPage() {
     setTools(tools.filter((t) => t.id !== id));
   };
 
-  const handleUpdateTool = (id: string, field: keyof ToolInput, value: any) => {
+  const handleUpdateTool = (id: string, field: keyof ToolInput, value: string | number) => {
     setTools((prev) =>
       prev.map((t) => (t.id === id ? { ...t, [field]: value } : t)),
     );
@@ -163,9 +163,10 @@ export function LandingPage() {
 
       toast.success("Audit complete!", { id: loadingToast });
       navigate(`/report/${shareId}`);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      toast.error(error.response?.data?.error || "Failed to generate audit.", {
+      const message = error instanceof Error ? error.message : "Failed to generate audit.";
+      toast.error(message, {
         id: loadingToast,
       });
       setIsSubmitting(false);

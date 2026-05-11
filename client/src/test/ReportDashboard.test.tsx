@@ -1,3 +1,4 @@
+import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { ReportDashboard } from '../components/ReportDashboard';
@@ -6,7 +7,7 @@ import type { ReportData } from '../types';
 
 // Mock components used inside Dashboard
 vi.mock('../components/AISummaryCard', () => ({
-  AISummaryCard: ({ summary }: any) => <div data-testid="ai-summary">{summary}</div>,
+  AISummaryCard: ({ summary }: { summary: string }) => <div data-testid="ai-summary">{summary}</div>,
 }));
 
 vi.mock('../components/SummaryCards', () => ({

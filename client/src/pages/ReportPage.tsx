@@ -35,9 +35,9 @@ export function ReportPage() {
         setAccessLevel(prev => ({ ...prev, isLead: true }));
       }
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err.response?.data?.error || 'Report not found.');
+      setError(err instanceof Error ? err.message : 'Report not found.');
     } finally {
       setLoading(false);
     }

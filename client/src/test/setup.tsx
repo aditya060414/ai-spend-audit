@@ -1,3 +1,4 @@
+import React from 'react';
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
@@ -15,24 +16,42 @@ class IntersectionObserverMock {
 vi.stubGlobal('IntersectionObserver', IntersectionObserverMock);
 
 // 8. Mock framer-motion (strip out motion props to avoid React warnings)
-const motionComponent = (Tag: string) => {
+const motionComponent = (Tag: keyof React.JSX.IntrinsicElements & string) => {
+  // Use Omit to avoid conflicts with existing HTML attributes
+  interface MotionProps extends Omit<React.HTMLAttributes<HTMLElement>, 'onAnimationStart' | 'onAnimationEnd' | 'onDrag' | 'onDragStart' | 'onDragEnd'> {
+    children?: React.ReactNode;
+    initial?: unknown;
+    animate?: unknown;
+    exit?: unknown;
+    variants?: unknown;
+    transition?: unknown;
+    layout?: unknown;
+    viewport?: unknown;
+    whileInView?: unknown;
+    whileHover?: unknown;
+    whileTap?: unknown;
+    onAnimationStart?: unknown;
+    onAnimationComplete?: unknown;
+    drag?: unknown;
+  }
+
   const Component = ({ 
     children, 
-    _initial, 
-    _animate, 
-    _exit, 
-    _variants, 
-    _transition, 
-    _layout, 
-    _viewport, 
-    _whileInView,
-    _whileHover,
-    _whileTap,
-    _onAnimationStart,
-    _onAnimationComplete,
+    initial: _initial, 
+    animate: _animate, 
+    exit: _exit, 
+    variants: _variants, 
+    transition: _transition, 
+    layout: _layout, 
+    viewport: _viewport, 
+    whileInView: _whileInView,
+    whileHover: _whileHover,
+    whileTap: _whileTap,
+    onAnimationStart: _onAnimationStart,
+    onAnimationComplete: _onAnimationComplete,
     ...props 
-  }: any) => {
-    return <Tag {...props}>{children}</Tag>;
+  }: MotionProps) => {
+    return React.createElement(Tag, props, children);
   };
   Component.displayName = `motion.${Tag}`;
   return Component;
@@ -54,14 +73,14 @@ vi.mock('framer-motion', () => ({
     p: motionComponent('p'),
     form: motionComponent('form'),
   },
-  AnimatePresence: ({ children }: any) => children,
+  AnimatePresence: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 // 7. Mock recharts
 vi.mock('recharts', () => ({
-  ResponsiveContainer: ({ children }: any) => children,
-  BarChart: ({ children }: any) => <div>{children}</div>,
-  PieChart: ({ children }: any) => <div>{children}</div>,
+  ResponsiveContainer: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  BarChart: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  PieChart: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   Bar: () => null,
   Pie: () => null,
   Cell: () => null,

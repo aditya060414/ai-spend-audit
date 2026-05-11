@@ -5,7 +5,7 @@ import { cn } from "../lib/utils";
 
 interface ToolCardProps {
   tool: ToolInput;
-  onUpdate: (id: string, field: keyof ToolInput, value: any) => void;
+  onUpdate: (id: string, field: keyof ToolInput, value: string | number) => void;
   onRemove: (id: string) => void;
   supportedTools: Record<string, string[]>;
   toolNames: string[];

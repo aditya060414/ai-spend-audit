@@ -11,12 +11,22 @@ interface SpendChartsSectionProps {
 
 const SAVINGS_COLORS = ['#10b981', '#3b82f6', '#8b5cf6', '#f97316', '#eab308'];
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+interface TooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    name: string;
+    value: number;
+    color: string;
+  }>;
+  label?: string;
+}
+
+const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-zinc-900 border border-zinc-700 rounded-xl p-3 shadow-xl min-w-[140px]">
         <p className="text-xs font-semibold text-zinc-300 mb-2 border-b border-zinc-700 pb-1.5">{label || 'Savings'}</p>
-        {payload.map((entry: any, i: number) => (
+        {payload.map((entry, i: number) => (
           <div key={i} className="flex items-center justify-between gap-4 mt-1">
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />

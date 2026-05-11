@@ -31,9 +31,9 @@ export function ShareSection({ shareId, onExportClick, onShareClick, isGeneratin
     if (navigator.share && navigator.canShare?.(shareData)) {
       try {
         await navigator.share(shareData);
-      } catch (err: any) {
+      } catch (err: unknown) {
         // User cancelled the native share dialog — not an error
-        if (err?.name !== 'AbortError') {
+        if (err instanceof Error && err.name !== 'AbortError') {
           toast.error('Could not open share dialog.');
         }
       }

@@ -50,8 +50,9 @@ export function LeadCaptureModal({
 
       toast.success("Your comprehensive audit has been sent to your email ID.");
       onSuccess(response.data.isHighValue || false);
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to submit details.");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Failed to submit details.";
+      toast.error(message);
       setIsSubmitting(false);
     }
   };

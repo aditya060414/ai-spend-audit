@@ -6,7 +6,7 @@ interface RecommendationsSectionProps {
   tools: ToolAuditResult[];
 }
 
-const actionConfig: Record<Recommendation, { label: string; color: string; bgColor: string; borderColor: string; icon: any }> = {
+const actionConfig: Record<Recommendation, { label: string; color: string; bgColor: string; borderColor: string; icon: React.ElementType }> = {
   keep:        { label: 'Optimal',     color: 'text-zinc-400',   bgColor: 'bg-zinc-500/10',  borderColor: 'border-zinc-600/30',  icon: CheckCircle2  },
   downgrade:   { label: 'Downgrade',   color: 'text-amber-400',  bgColor: 'bg-amber-500/10', borderColor: 'border-amber-600/30', icon: ArrowDownCircle },
   upgrade:     { label: 'Upgrade',     color: 'text-blue-400',   bgColor: 'bg-blue-500/10',  borderColor: 'border-blue-600/30',  icon: ArrowDownCircle },

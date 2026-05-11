@@ -13,7 +13,7 @@ export default defineConfig({
       },
     },
   },
-  // @ts-ignore - Vitest types sometimes conflict with Vite types in defineConfig
+  // @ts-expect-error - Vitest types sometimes conflict with Vite types in defineConfig
   test: {
     globals: true,
     environment: 'jsdom',

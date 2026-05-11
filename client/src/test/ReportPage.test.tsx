@@ -24,7 +24,7 @@ vi.mock('../lib/api', () => ({
 
 // Mock ReportDashboard since we only want to test ReportPage logic here
 vi.mock('../components/ReportDashboard', () => ({
-  ReportDashboard: ({ data }: any) => <div data-testid="report-dashboard">{data.aiSummary}</div>,
+  ReportDashboard: ({ data }: { data: ReportData }) => <div data-testid="report-dashboard">{data.aiSummary}</div>,
 }));
 
 // Mock LeadCaptureModal

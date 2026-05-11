@@ -74,7 +74,7 @@ const SidebarContent = ({ settings, setSettings, setIsSidebarOpen, onGenerate, t
           ].map(s => (
             <button
               key={s.id}
-              onClick={() => toggleSection(s.id as any)}
+              onClick={() => toggleSection(s.id as keyof Pick<PdfExportSettings, 'includeCharts' | 'includeCover' | 'showRecommendations' | 'showAiSummary' | 'compactMode'>)}
               className="w-full flex items-center justify-between p-3.5 bg-zinc-900/30 border border-zinc-800 rounded-xl hover:bg-zinc-800/50 transition-colors group"
             >
               <span className="text-xs font-medium text-zinc-400 group-hover:text-zinc-200">{s.label}</span>

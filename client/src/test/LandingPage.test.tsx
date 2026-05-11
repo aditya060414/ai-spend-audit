@@ -269,7 +269,7 @@ describe('LandingPage', () => {
           setTimeout(() => resolve({
             data: { shareId: '123' },
           }), 100)
-        ) as any
+        ) as Promise<{ data: { shareId: string } }>
     );
 
     renderLandingPage();

@@ -107,7 +107,7 @@ describe('ToolBreakdownTable', () => {
       }
     ];
 
-    render(<ToolBreakdownTable tools={tools as any} />);
+    render(<ToolBreakdownTable tools={tools as ToolAuditResult[]} />);
     expect(screen.getByText(/Credits Available/i)).toBeInTheDocument();
   });
 });
