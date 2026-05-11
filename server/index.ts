@@ -17,7 +17,7 @@ app.use(
   cors({
     origin: [
       process.env.CLIENT_URL || "http://localhost:5173",
-      "https://ai-spend-audit-client.vercel.app"
+      "https://ai-spend-audit-user.vercel.app"
     ],
     credentials: true,
   }),
