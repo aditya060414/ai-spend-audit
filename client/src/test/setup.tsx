@@ -18,18 +18,18 @@ vi.stubGlobal('IntersectionObserver', IntersectionObserverMock);
 const motionComponent = (Tag: string) => {
   const Component = ({ 
     children, 
-    initial, 
-    animate, 
-    exit, 
-    variants, 
-    transition, 
-    layout, 
-    viewport, 
-    whileInView,
-    whileHover,
-    whileTap,
-    onAnimationStart,
-    onAnimationComplete,
+    _initial, 
+    _animate, 
+    _exit, 
+    _variants, 
+    _transition, 
+    _layout, 
+    _viewport, 
+    _whileInView,
+    _whileHover,
+    _whileTap,
+    _onAnimationStart,
+    _onAnimationComplete,
     ...props 
   }: any) => {
     return <Tag {...props}>{children}</Tag>;
