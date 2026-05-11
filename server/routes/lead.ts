@@ -1,3 +1,4 @@
+// Lead capture route for AI Spend Audit
 import { Router, Request, Response } from "express";
 import { LeadInputSchema } from "../middlewares/auditValidator.js";
 import { Lead } from "../models/Lead.js";

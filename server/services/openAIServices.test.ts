@@ -1,3 +1,4 @@
+// Tests for AI summary generation and fallback logic
 import { describe, it, expect } from "vitest";
 import { generateAISummary, generateFallbackSummary } from "./openAIServices.js";
 import type { AuditInput, AuditSummary } from "./auditEngine.js";
