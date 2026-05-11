@@ -38,8 +38,6 @@ router.post("/", leadLimiter, async (req: Request, res: Response) => {
   const totalMonthlySavings = report.auditResults.totalMonthlySavings;
   const isHighValue = totalMonthlySavings > 500;
 
-  let emailSent: boolean;
-
   try {
     await Lead.create({
       shareId,
@@ -52,7 +50,8 @@ router.post("/", leadLimiter, async (req: Request, res: Response) => {
     });
 
     await Report.updateOne({ shareId }, { isLeadCaptured: true });
-    emailSent = await sendAuditEmail({
+
+    const emailSent = await sendAuditEmail({
       to: email,
       shareId,
       totalMonthlySavings,
