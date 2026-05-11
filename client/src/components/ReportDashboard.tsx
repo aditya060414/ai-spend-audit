@@ -67,12 +67,6 @@ export function ReportDashboard({ data, accessLevel: _accessLevel }: ReportDashb
     }
   }, [shareId]);
 
-  const handleShareOrExport = useCallback(() => {
-    // Lead capture is optional and only triggered on export/share
-    if (!_accessLevel?.isLead) {
-      window.dispatchEvent(new CustomEvent('trigger-lead-capture'));
-    }
-  }, [_accessLevel]);
 
   const isHighSavings = auditResults.totalMonthlySavings > 500;
 
