@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from 'axios';
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -51,7 +52,12 @@ export function LeadCaptureModal({
       toast.success("Your comprehensive audit has been sent to your email ID.");
       onSuccess(response.data.isHighValue || false);
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Failed to submit details.";
+      let message = "Failed to submit details.";
+      if (axios.isAxiosError(error)) {
+        message = error.response?.data?.error || error.message;
+      } else if (error instanceof Error) {
+        message = error.message;
+      }
       toast.error(message);
       setIsSubmitting(false);
     }
