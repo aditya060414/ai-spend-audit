@@ -38,7 +38,7 @@ router.post("/", leadLimiter, async (req: Request, res: Response) => {
   const totalMonthlySavings = report.auditResults.totalMonthlySavings;
   const isHighValue = totalMonthlySavings > 500;
 
-  let emailSent = false;
+  let emailSent: boolean;
 
   try {
     await Lead.create({
