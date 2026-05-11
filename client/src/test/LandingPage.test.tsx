@@ -143,7 +143,8 @@ describe('LandingPage', () => {
 
   it('handles submission error gracefully', async () => {
     vi.mocked(api.post).mockRejectedValueOnce({ 
-      response: { data: { error: 'API Error Message' } } 
+      response: { data: { error: 'API Error Message' } },
+      isAxiosError: true
     });
     renderLandingPage();
 
