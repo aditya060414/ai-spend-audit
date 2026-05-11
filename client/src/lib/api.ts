@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // custom api
 const api = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'https://ai-spend-audit-lm5x.onrender.com',
   timeout: 15000,
 });
 
