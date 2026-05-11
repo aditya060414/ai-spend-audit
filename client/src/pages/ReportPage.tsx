@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../lib/api';
 import { ReportDashboard } from '../components/ReportDashboard';
@@ -14,27 +14,26 @@ export function ReportPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
-  const [accessLevel, setAccessLevel] = useState({
-    isOwner: false,
-    isLead: false,
-    isHighValue: false,
+  const [accessLevel, setAccessLevel] = useState(() => {
+    const localData = JSON.parse(localStorage.getItem(`report_${shareId}`) || '{}');
+    return {
+      isOwner: !!localData.isOwner,
+      isLead: !!localData.isLead, 
+      isHighValue: !!localData.isHighValue,
+    };
   });
 
   const [showLeadCapture, setShowLeadCapture] = useState(false);
 
-  const fetchReport = async () => {
+  const fetchReport = useCallback(async () => {
     try {
       const response = await api.get(`/api/reports/${shareId}`);
       setData(response.data);
       
-      // Check local storage for access levels
-      const localData = JSON.parse(localStorage.getItem(`report_${shareId}`) || '{}');
-      const currentAccess = {
-        isOwner: !!localData.isOwner,
-        isLead: !!localData.isLead || !!response.data.isLeadCaptured, 
-        isHighValue: !!localData.isHighValue,
-      };
-      setAccessLevel(currentAccess);
+      // Update lead status if already captured on server
+      if (response.data.isLeadCaptured && !accessLevel.isLead) {
+        setAccessLevel(prev => ({ ...prev, isLead: true }));
+      }
 
     } catch (err: any) {
       console.error(err);
@@ -42,13 +41,14 @@ export function ReportPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [shareId, accessLevel.isLead]);
 
   useEffect(() => {
     if (shareId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       fetchReport();
     }
-  }, [shareId]);
+  }, [shareId, fetchReport]);
 
   // Removed automatic lead capture timer to make it completely optional.
   // Lead capture is now only triggered by user actions (Share/Export).
