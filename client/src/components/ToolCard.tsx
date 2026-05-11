@@ -36,6 +36,7 @@ export function ToolCard({
         "will-change-transform",
       )}
     >
+      <div className="col-span-1 sm:col-span-2 lg:col-span-3">
         <label htmlFor={`toolName-${tool.id}`} className="block text-[10px] lg:text-xs font-semibold text-zinc-400 mb-1.5 uppercase tracking-wider">
           Tool Name
         </label>
@@ -54,6 +55,8 @@ export function ToolCard({
           ))}
         </datalist>
       </div>
+
+      <div className="col-span-1 lg:col-span-2">
         <label htmlFor={`currentPlan-${tool.id}`} className="block text-[10px] lg:text-xs font-semibold text-zinc-400 mb-1.5 uppercase tracking-wider">
           Plan
         </label>
@@ -69,7 +72,6 @@ export function ToolCard({
         <datalist id={`plan-suggestions-${tool.id}`}>
           {(() => {
             const normalizedInput = tool.toolName.trim().toLowerCase();
-            // Find the first tool that matches the input (e.g., "cur" matches "Cursor")
             const toolKey = Object.keys(supportedTools).find(
               (key) => key.toLowerCase().includes(normalizedInput) && normalizedInput.length >= 2
             ) || Object.keys(supportedTools).find(
@@ -82,6 +84,8 @@ export function ToolCard({
           })()}
         </datalist>
       </div>
+
+      <div className="col-span-1 lg:col-span-2">
         <label htmlFor={`seats-${tool.id}`} className="block text-[10px] lg:text-xs font-semibold text-zinc-400 mb-1.5 uppercase tracking-wider">
           Seats
         </label>
@@ -96,6 +100,8 @@ export function ToolCard({
           className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2.5 lg:py-2 text-sm text-zinc-100 focus:outline-none focus:border-zinc-600 transition-colors"
         />
       </div>
+
+      <div className="col-span-1 lg:col-span-2">
         <label htmlFor={`monthlyCost-${tool.id}`} className="block text-[10px] lg:text-xs font-semibold text-zinc-400 mb-1.5 uppercase tracking-wider">
           Cost/mo ($)
         </label>
@@ -110,6 +116,7 @@ export function ToolCard({
           className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2.5 lg:py-2 text-sm text-zinc-100 focus:outline-none focus:border-zinc-600 transition-colors"
         />
       </div>
+
       <div className="col-span-1 sm:col-span-2 lg:col-span-2">
         <label className="block text-[10px] lg:text-xs font-semibold text-zinc-400 mb-1.5 uppercase tracking-wider">
           Intensity
@@ -132,6 +139,7 @@ export function ToolCard({
           ))}
         </div>
       </div>
+
       <div className="col-span-1 sm:col-span-2 lg:col-span-1 flex justify-end mt-2 lg:mt-0">
         <button
           type="button"
