@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import api from "../lib/api";
 import { motion, AnimatePresence } from "framer-motion";
@@ -165,7 +166,12 @@ export function LandingPage() {
       navigate(`/report/${shareId}`);
     } catch (error: unknown) {
       console.error(error);
-      const message = error instanceof Error ? error.message : "Failed to generate audit.";
+      let message = "Failed to generate audit.";
+      if (axios.isAxiosError(error)) {
+        message = error.response?.data?.error || error.message;
+      } else if (error instanceof Error) {
+        message = error.message;
+      }
       toast.error(message, {
         id: loadingToast,
       });
