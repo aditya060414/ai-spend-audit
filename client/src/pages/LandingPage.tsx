@@ -44,18 +44,47 @@ const AuditSchema = z.object({
 export function LandingPage() {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [teamSize, setTeamSize] = useState<string>("");
-  const [useCases, setUseCases] = useState<string>("coding");
-  const [tools, setTools] = useState<ToolInput[]>([
-    {
-      id: crypto.randomUUID(),
-      toolName: "",
-      currentPlan: "",
-      seats: 1,
-      monthlyCost: 0,
-      usageIntensity: "medium",
-    },
-  ]);
+  const [teamSize, setTeamSize] = useState<string>(() => {
+    const saved = localStorage.getItem("audit_form_state");
+    if (saved) {
+      try {
+        const { teamSize: s } = JSON.parse(saved);
+        return s || "";
+      } catch (e) { console.error(e); }
+    }
+    return "";
+  });
+
+  const [useCases, setUseCases] = useState<string>(() => {
+    const saved = localStorage.getItem("audit_form_state");
+    if (saved) {
+      try {
+        const { useCases: u } = JSON.parse(saved);
+        return u || "coding";
+      } catch (e) { console.error(e); }
+    }
+    return "coding";
+  });
+
+  const [tools, setTools] = useState<ToolInput[]>(() => {
+    const saved = localStorage.getItem("audit_form_state");
+    if (saved) {
+      try {
+        const { tools: t } = JSON.parse(saved);
+        if (t && t.length > 0) return t;
+      } catch (e) { console.error(e); }
+    }
+    return [
+      {
+        id: crypto.randomUUID(),
+        toolName: "",
+        currentPlan: "",
+        seats: 1,
+        monthlyCost: 0,
+        usageIntensity: "medium",
+      },
+    ];
+  });
 
   const handleAddTool = () => {
     setTools([
@@ -80,21 +109,6 @@ export function LandingPage() {
       prev.map((t) => (t.id === id ? { ...t, [field]: value } : t)),
     );
   };
-
-  // Load state on mount
-  useEffect(() => {
-    const saved = localStorage.getItem("audit_form_state");
-    if (saved) {
-      try {
-        const { teamSize: s, useCases: u, tools: t } = JSON.parse(saved);
-        if (s) setTeamSize(s);
-        if (u) setUseCases(u);
-        if (t && t.length > 0) setTools(t);
-      } catch (e) {
-        console.error("Failed to load saved state", e);
-      }
-    }
-  }, []);
 
   // Save state on change
   useEffect(() => {
