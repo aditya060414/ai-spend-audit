@@ -1,34 +1,34 @@
-## Day 1 — 06-05-2026
+## Day 1 - 06-05-2026
 
 **Hours worked:** 2
 
-**Today's:**
+### Today's Work
 
 - Read the full assignment carefully and broke the project into frontend, backend, audit engine, and documentation tasks.
-- Using MERN stack, as I have already build projects using MERN so this will help me write more clean and efficient code.
+- Used MERN stack to ensure clean and efficient code based on prior experience.
 - Set up the monorepo structure with separate `client` and `server` folders.
 - Initialized the React frontend using Vite + TypeScript.
 - Set up the Express backend with TypeScript support.
 - Installed core dependencies including Express, Mongoose, Axios, TailwindCSS, React Router, dotenv, and ts-node-dev.
 - Configured TailwindCSS and verified frontend + backend development servers were running correctly.
-- Researched the assignment requirements more deeply, especially around the audit engine, shareable reports, and lead capture flow.
+- Researched the assignment requirements deeply, focusing on the audit engine, shareable reports, and lead capture flow.
 
-**Learnings:**
+### Learnings
 
-- The assignment is much more product-focused than algorithm-focused.
-- The core value of the project is not AI generation, but building believable and financially sensible optimization logic.
-- A large portion of the evaluation is based on documentation, reasoning, and execution discipline rather than only UI or backend complexity.
+- The assignment is more product-focused than algorithm-focused.
+- The core value lies in building believable and financially sensible optimization logic rather than just AI generation.
+- Documentation, reasoning, and execution discipline are key evaluation criteria.
 
-**Blockers / what I'm stuck on:**
+### Blockers
 
-- Initially ran into TypeScript module configuration issues with ES Modules vs CommonJS in the backend setup.
-- Needed to understand how NodeNext module resolution works with TypeScript imports.
+- Initially encountered TypeScript module configuration issues (ES Modules vs. CommonJS) in the backend setup.
+- Needed to understand `NodeNext` module resolution for TypeScript imports.
 
-**Plan for tomorrow:**
+### Plan for Tomorrow
 
-- Research on pricing and plans of different LLM's.
-- Build auditEngine and auditEngine test.
-- write all the cases to determine the best plan and give the cheapest plan.
+- Research pricing and plans for various LLM platforms.
+- Build the `auditEngine` and its corresponding tests.
+- Define logic for determining optimal and cheapest plans.
 
 ---
 
@@ -39,131 +39,38 @@
 ### Today's Work
 
 #### Research & Pricing Intelligence
+- Researched pricing, features, token limits, seat pricing, and usage tiers for major AI platforms:
+  - ChatGPT, Claude, Cursor, GitHub Copilot, Windsurf.
+- Compared monthly vs. annual pricing, team vs. enterprise plans, and overlapping functionality.
+- Documented all verified pricing and feature data in `PRICING_DATA.md`.
 
-- Researched pricing, features, token limits, seat pricing, governance controls, and usage tiers across major AI SaaS platforms:
-  - ChatGPT
-  - Claude
-  - Cursor
-  - GitHub Copilot
-  - Windsurf
+#### Audit Engine Implementation
+- Implemented core SaaS optimization logic in `auditEngine.ts`.
+- Defined reusable TypeScript types and interfaces (`UseCases`, `Recommendation`, `ToolInput`, `AuditSummary`, etc.).
+- Built a centralized `Pricing` object with tiers, constraints, and compatibility mappings.
+- Developed helper functions for plan lookup, cheapest plan detection, and savings calculations.
+- Built the `runAuditEngine()` workflow to analyze stacks and generate recommendations.
 
-- Compared:
-  - monthly vs annual pricing
-  - team vs enterprise plans
-  - coding vs writing/research use cases
-  - overlapping functionality between tools
-  - enterprise governance and admin capabilities
-
-- Documented all verified pricing and feature data in `PRICING_DATA.md` for audit engine reference.
-
----
-
-#### `auditEngine.ts`
-
-Implemented the core SaaS optimization engine logic.
-
-##### Type Definitions
-
-Defined reusable TypeScript types for:
-
-- `UseCases`
-- `Recommendation`
-- `SavingsCategory`
-
-##### Interfaces
-
-Created reusable interfaces for:
-
-- `ToolInput`
-- `AuditInput`
-- `ToolAuditResult`
-- `AuditSummary`
-- `PlanDef`
-- `ToolDef`
-
-##### Pricing System
-
-- Built centralized `Pricing` object containing:
-  - pricing tiers
-  - seat constraints
-  - use-case compatibility
-  - enterprise/custom pricing flags
-
-##### Audit Logic
-
-Implemented helper functions for:
-
-- plan lookup
-- cheapest compatible plan detection
-- overlap detection
-- monthly and annual savings calculation
-- savings category classification
-
-##### Main Audit Engine
-
-Built the main `runAuditEngine()` workflow to:
-
-- analyze current SaaS stack
-- recommend downgrades/consolidation
-- calculate projected savings
-- generate audit summaries
-
----
-
-#### `auditEngine.test.ts`
-
-Implemented 7 test cases covering:
-
-- valid downgrade recommendations
-- overlap consolidation
-- annual savings calculations
-- unknown tool handling
-- honest “no savings” scenarios
-- edge cases and pricing validation
-
-All tests passing successfully after debugging recommendation and calculation logic.
-
----
+#### Testing
+- Implemented `auditEngine.test.ts` with 7 test cases covering valid downgrades, overlap consolidation, and edge cases.
+- All tests passed after refining calculation logic.
 
 ### Learnings
 
-- Understood differences between:
-  - Free / Pro / Team / Enterprise plans
-  - subscription pricing vs usage-based pricing
-  - coding-focused vs research-focused AI tooling
-
-- Learned:
-  - how to structure reusable TypeScript interfaces
-  - how TypeScript `Record<>` works
-  - how to design deterministic pricing engines
-  - how to write and debug unit tests using Vitest
-  - how to structure pricing intelligence for SaaS optimization systems
-
-- Improved understanding of:
-  - overlap detection
-  - SaaS economics
-  - audit/recommendation workflows
-
----
+- Deepened understanding of SaaS pricing tiers (Free, Pro, Team, Enterprise) and subscription vs. usage-based models.
+- Learned to structure complex TypeScript interfaces and use `Record<>` effectively.
+- Gained experience in designing deterministic pricing engines and writing unit tests with Vitest.
 
 ### Blockers
 
-- 3 test cases initially failed due to:
-  - incorrect savings calculations
-  - overlap logic overwriting downgrade recommendations
-  - missing return statement inside `.find()`
-
-- Fixed all issues and validated expected outputs.
-
----
+- Test failures due to incorrect savings calculations and overlap logic overwriting recommendations.
+- Debugged and fixed a missing return statement in a `.find()` call.
 
 ### Plan for Tomorrow
 
-- Design MongoDB schemas and database structure
-- Build Express routes and middleware
-- Add API validation and error handling
-- Test all backend routes
-- Start integrating audit engine with API endpoints
+- Design MongoDB schemas and database structure.
+- Build Express routes and middleware with validation and error handling.
+- Integrate the audit engine with API endpoints.
 
 ---
 
@@ -173,32 +80,105 @@ All tests passing successfully after debugging recommendation and calculation lo
 
 ### Today's Work
 
-- Build Report and Lead models - PII isolation design, Lead collection never exposed via API.
-- Middlewares to validate audit using `zod` and ratelimit to limit request per IP.
-- Build POST `api/audit` to take user input and _runAuditEngine_.
-- GET `api/reports` return report without PII.
-- POST `api/leads` to log user details and check for idempotent on duplicate email+shareId.
-- Tested all the three routes.
-
----
+- Built `Report` and `Lead` models with PII isolation (Leads are never exposed via API).
+- Implemented middlewares for input validation using `Zod` and rate limiting per IP.
+- Created `POST /api/audit` to process user input through the audit engine.
+- Created `GET /api/reports/:id` to return reports without PII.
+- Created `POST /api/leads` with idempotency checks for duplicate email/shareId combinations.
+- Verified all three routes through testing.
 
 ### Learnings
 
-- Generate shareable id using nanoId.
-- Zod's safeParse and learned Zod's validation for the first time.
-- PII protections and bot handling using hidden css feature on screen for users but bot can read it and faked success response.
-
----
+- Used `nanoid` for generating secure, non-sequential shareable IDs.
+- Mastered `Zod` for schema validation (`safeParse`).
+- Implemented "honeypot" fields (hidden CSS features) for bot detection.
 
 ### Blockers
 
-- Initially storing duplicate data which was consuming a lot of space.
-- PII protections, the leads data was not protected initially, found nanoId a shareable id that does not reveal user info.
+- Initially stored duplicate data, leading to unnecessary space consumption.
+- Refined PII protection after identifying that lead data wasn't sufficiently isolated.
+
+### Plan for Tomorrow
+
+- Integrate Gemini API for dynamic audit summaries.
+- Implement graceful error handling and fallbacks for API failures.
+- Set up Resend for transactional emails on lead capture.
+- Write `PROMPTS.md` to document AI reasoning and prompts.
+- Begin frontend UI design and setup.
 
 ---
 
+## Day 4 - 09-05-2026
+
+**Hours worked:** 6
+
+### Today's Work
+
+- Implemented fallback summary logic for when the AI API fails.
+- Built `emailService` using **Resend** to send report links to captured leads.
+- Integrated OpenRouter API for generating intelligent audit summaries.
+- Expanded test coverage for `auditEngine`, `openAIServices`, and `auditValidator`.
+- Started UI implementation of the `ReportPage` using TypeScript.
+
+### Learnings
+
+- Learned to design and send email templates using Resend.
+- Improved testing and debugging skills for complex asynchronous workflows.
+- Optimized prompts for more efficient and accurate result summaries.
+
+### Blockers
+
+- Complexity in testing all edge cases for the audit engine.
+- Configuration challenges with Resend email templates.
+
 ### Plan for Tomorrow
-- Add Gemini API call in audit.ts to replace the fallback summary
-- Handle 429 / API errors gracefully with the templated fallback
-- Set up Resend for transactional email on lead capture
-- Write PROMPTS.md with the full summary prompt and reasoning
+
+- Build React frontend: landing page, report dashboard, and PDF preview.
+- Implement comprehensive frontend validation for user inputs.
+- Create interactive charts (spend/savings) and AI recommendation displays.
+- Develop the PDF export system with customization options (themes, quality).
+
+---
+
+## Day 5 - 10-05-2026
+
+**Hours worked:** 10
+
+### Today's Work
+
+#### Landing Page Development
+- Designed and implemented a modern, responsive `LandingPage` with smooth Framer Motion animations.
+- Integrated real-time form handling and `Zod` validation.
+- Added an intelligent suggestion box and instant spending calculations.
+
+#### Report & Dashboard
+- Developed the `ReportPage` workflow with robust error handling.
+- Built the `ReportDashboard` featuring dynamic visualizations, savings insights, and interactive charts.
+- Integrated AI-generated summaries and tool-wise breakdown tables.
+
+#### PDF Export System
+- Implemented a comprehensive PDF export feature with:
+  - Dark/Light theme support.
+  - Customizable chart colors and output quality.
+  - Compact mode and configurable content sections (charts, cover page, etc.).
+- Integrated lead capture gating for export and share actions.
+- Added toast notifications for status updates and feedback.
+- Included enterprise and high-savings CTA sections.
+
+### Learnings
+
+- Mastered complex state management for multi-step forms and gated content.
+- Learned to generate customizable PDFs on the client-side with dynamic data.
+- Improved UI/UX design skills using TailwindCSS and Framer Motion for a premium feel.
+
+### Blockers
+
+- Handling responsive layouts for complex charts on ultra-narrow mobile screens.
+- Synchronizing PDF generation themes with the application's global state.
+
+### Plan for Tomorrow
+
+- Finalize production deployment and environment configuration.
+- Perform end-to-end testing of the lead capture and email flow.
+- Optimize performance and SEO meta tags.
+
