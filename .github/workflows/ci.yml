@@ -1,3 +1,4 @@
+# Continuous Integration Workflow for AI Spend Audit
 name: CI
 
 on:
