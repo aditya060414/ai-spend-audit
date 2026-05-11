@@ -78,10 +78,9 @@ describe('ReportPage', () => {
   });
 
   it('shows error state when report fetch fails', async () => {
-    vi.mocked(api.get).mockRejectedValueOnce({
-      response: {
-        data: { error: 'Report not found' },
-      },
+    vi.mocked(api.get).mockRejectedValueOnce({ 
+      response: { data: { error: 'Report not found' } },
+      isAxiosError: true
     });
     renderReportPage();
     await waitFor(() => {
