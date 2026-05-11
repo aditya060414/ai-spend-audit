@@ -21,7 +21,7 @@ export interface ThemeConfig {
   chartColors: string[];
 }
 
-export const getThemeConfig = (theme: PdfTheme, colorMode: ChartColor, compactMode: boolean): ThemeConfig => {
+export const getThemeConfig = (theme: PdfTheme, _colorMode: ChartColor, _compactMode: boolean): ThemeConfig => {
   let base: Omit<ThemeConfig, 'chartColors' | 'spacing'>;
   
   if (theme === 'light') {
