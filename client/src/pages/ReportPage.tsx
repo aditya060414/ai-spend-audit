@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../lib/api';
 import { ReportDashboard } from '../components/ReportDashboard';
@@ -37,7 +38,13 @@ export function ReportPage() {
 
     } catch (err: unknown) {
       console.error(err);
-      setError(err instanceof Error ? err.message : 'Report not found.');
+      let message = 'Report not found.';
+      if (axios.isAxiosError(err)) {
+        message = err.response?.data?.error || err.message;
+      } else if (err instanceof Error) {
+        message = err.message;
+      }
+      setError(message);
     } finally {
       setLoading(false);
     }
