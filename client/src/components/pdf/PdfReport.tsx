@@ -1,7 +1,7 @@
 import type { ReportData, PdfExportSettings } from '../../types';
 import { PdfPage } from './PdfPage';
 import { getThemeConfig, type ThemeConfig } from './theme';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
 
 interface PdfReportProps {
   data: ReportData;
@@ -249,7 +249,7 @@ const PdfRecsBlock = ({ data, theme }: { data: ReportData, theme: ThemeConfig })
 // INTELLIGENT PAGINATOR ALGORITHM
 // -----------------------------------------------------------------------------
 
-export function PdfReport({ data, settings, isPreview = false, previewZoom }: PdfReportProps) {
+export function PdfReport({ data, settings, isPreview = false }: PdfReportProps) {
   const theme = getThemeConfig(settings.theme, settings.chartColor, settings.compactMode);
 
   // Define dynamic block weights based on actual data length
