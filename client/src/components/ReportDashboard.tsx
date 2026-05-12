@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, lazy, Suspense, memo } from 'react';
 import type { ReportData, PdfExportSettings } from '../types';
 import { HeroSection } from './HeroSection';
 import { SummaryCards } from './SummaryCards';
@@ -6,14 +6,16 @@ import { ToolBreakdownTable } from './ToolBreakdownTable';
 import { AISummaryCard } from './AISummaryCard';
 import { HighSavingsCTA } from './HighSavingsCTA';
 import { ShareSection } from './ShareSection';
-import { SpendChartsSection } from './SpendChartsSection';
 import { RecommendationsSection } from './RecommendationsSection';
 import { downloadPdf } from '../utils/downloadPdf';
-import { PdfReport } from './pdf/PdfReport';
 import { getThemeConfig } from './pdf/theme';
-import { ExportModal } from './ExportModal';
 import { EnterpriseCTA } from './EnterpriseCTA';
 import { toast } from 'react-hot-toast';
+import { ChartSkeleton } from './ChartSkeleton';
+
+const SpendChartsSection = lazy(() => import('./SpendChartsSection').then(m => ({ default: m.SpendChartsSection })));
+const PdfReport = lazy(() => import('./pdf/PdfReport').then(m => ({ default: m.PdfReport })));
+const ExportModal = lazy(() => import('./ExportModal').then(m => ({ default: m.ExportModal })));
 
 // 
 interface AccessLevel {
@@ -27,7 +29,7 @@ interface ReportDashboardProps {
   accessLevel?: AccessLevel;
 }
 
-export function ReportDashboard({ data, accessLevel: _accessLevel }: ReportDashboardProps) {
+export const ReportDashboard = memo(function ReportDashboard({ data, accessLevel: _accessLevel }: ReportDashboardProps) {
   const { auditResults, aiSummary, shareId } = data;
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -76,15 +78,19 @@ export function ReportDashboard({ data, accessLevel: _accessLevel }: ReportDashb
       <div className="absolute top-0 inset-x-0 h-[500px] bg-gradient-to-b from-indigo-500/10 via-transparent to-transparent pointer-events-none" />
       
       {/* Hidden dedicated print/PDF layout */}
-      <PdfReport data={data} settings={exportSettings} />
+      <Suspense fallback={null}>
+        <PdfReport data={data} settings={exportSettings} />
+      </Suspense>
       
-      <ExportModal 
-        isOpen={isExportModalOpen}
-        onClose={() => setIsExportModalOpen(false)}
-        onGenerate={handleGeneratePdf}
-        defaultSettings={exportSettings}
-        data={data}
-      />
+      <Suspense fallback={null}>
+        <ExportModal 
+          isOpen={isExportModalOpen}
+          onClose={() => setIsExportModalOpen(false)}
+          onGenerate={handleGeneratePdf}
+          defaultSettings={exportSettings}
+          data={data}
+        />
+      </Suspense>
       
       <main className="relative max-w-7xl mx-auto px-4 sm:px-10 lg:px-16 py-8 md:py-24">
         <div className="pb-10 bg-transparent">
@@ -95,7 +101,9 @@ export function ReportDashboard({ data, accessLevel: _accessLevel }: ReportDashb
           
           <SummaryCards summary={auditResults} />
           
-          <SpendChartsSection summary={auditResults} />
+          <Suspense fallback={<ChartSkeleton />}>
+            <SpendChartsSection summary={auditResults} />
+          </Suspense>
           
           <div>
             <RecommendationsSection tools={auditResults.perTool} />
@@ -150,4 +158,4 @@ export function ReportDashboard({ data, accessLevel: _accessLevel }: ReportDashb
       </main>
     </div>
   );
-}
+});
