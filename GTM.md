@@ -28,6 +28,12 @@ Unlike generic SaaS spend trackers, the platform is purpose-built for the emergi
 - **Characteristics**: Heavy daily AI usage, paying for multiple coding assistants (e.g., Cursor + Copilot), highly active on Twitter/X and Reddit.
 - **Value**: They are the early adopters who seed discussion and distribution in technical communities.
 
+### Where they hang out:
+- **Reddit**: r/startups, r/SideProject, r/ExperiencedDevs, r/ChatGPT, r/ClaudeAI
+- **Slack**: Rands Leadership Slack (#tools), MicroConf Connect, Online Geniuses
+- **X/Twitter**: #buildinpublic, #indiehacker, followers of @levelsio, @marc_louvion, @dvassallo
+- **Discord**: Buildspace, Indie Worldwide
+
 ---
 
 ## Why Now?
@@ -96,6 +102,18 @@ Every audit generates a unique public URL.
 | **Share Rate < 5%** | Output isn't "emotionally" compelling enough to share. | Improve report visuals; generate more opinionated/stronger recommendations. |
 | **Credex CTA < 5%** | CTA feels too sales-oriented or value isn't clear. | Test "softer" copy; clarify the "Additional Savings" potential. |
 | **Completion Rate < 25%** | Onboarding flow is too long/complex. | Reduce required fields; simplify tool selection UX. |
+
+---
+
+## 30-Day Zero Budget Plan
+
+**Week 1:** Reddit post (r/startups, r/SideProject) + HN Show HN submission + X/Twitter launch thread.
+
+**Week 2:** DM 20 founders directly on Indie Hackers and X asking for feedback, not signups.
+
+**Week 3:** Credex existing customer email goes out. Collect first testimonials from high-savings users.
+
+**Week 4:** Analyze funnel data, double down on highest-converting channel, iterate on share card copy.
 
 ---
 
