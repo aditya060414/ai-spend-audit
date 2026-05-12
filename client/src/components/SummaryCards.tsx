@@ -1,4 +1,5 @@
 
+import { memo } from 'react';
 import { motion, type Variants } from 'framer-motion';
 import { DollarSign, ArrowDownRight, Wallet, PiggyBank } from 'lucide-react';
 import type { AuditSummary } from '../types';
@@ -7,7 +8,7 @@ interface SummaryCardsProps {
   summary: AuditSummary;
 }
 
-export function SummaryCards({ summary }: SummaryCardsProps) {
+export const SummaryCards = memo(function SummaryCards({ summary }: SummaryCardsProps) {
   const perTool = summary?.perTool || [];
   const currentTotalMonthly = perTool.reduce((acc, tool) => acc + (Number(tool.currentMonthlySpending) || 0), 0);
   const optimizedTotalMonthly = perTool.reduce((acc, tool) => acc + (Number(tool.projectedMonthlyCost) || 0), 0);
@@ -94,4 +95,4 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
       ))}
     </motion.div>
   );
-}
+});
