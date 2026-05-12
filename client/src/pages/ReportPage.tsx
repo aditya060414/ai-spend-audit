@@ -5,7 +5,9 @@ import api from '../lib/api';
 import { ReportDashboard } from '../components/ReportDashboard';
 import type { ReportData } from '../types';
 import { Loader2, AlertCircle, ArrowLeft } from 'lucide-react';
-import { LeadCaptureModal } from '../components/LeadCaptureModal'; 
+import { lazy, Suspense } from 'react';
+
+const LeadCaptureModal = lazy(() => import('../components/LeadCaptureModal').then(m => ({ default: m.LeadCaptureModal })));
 
 
 export function ReportPage() {
@@ -124,14 +126,16 @@ export function ReportPage() {
 
       <ReportDashboard data={data} accessLevel={accessLevel} />
       
-      {showLeadCapture && data && shareId && (
-        <LeadCaptureModal 
-          shareId={shareId}
-          totalSavings={data.auditResults.totalMonthlySavings}
-          onSuccess={handleLeadCaptured}
-          onClose={() => setShowLeadCapture(false)}
-        />
-      )}
+      <Suspense fallback={null}>
+        {showLeadCapture && data && shareId && (
+          <LeadCaptureModal 
+            shareId={shareId}
+            totalSavings={data.auditResults.totalMonthlySavings}
+            onSuccess={handleLeadCaptured}
+            onClose={() => setShowLeadCapture(false)}
+          />
+        )}
+      </Suspense>
     </div>
   );
 }
