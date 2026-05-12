@@ -1,5 +1,3 @@
-import { toJpeg } from 'html-to-image';
-import jsPDF from 'jspdf';
 import type { PdfQuality } from '../types';
 
 /**
@@ -25,6 +23,9 @@ export async function downloadPdf(
   if (pages.length === 0) {
     throw new Error("No elements with class '.pdf-page-container' found.");
   }
+
+  const { default: jsPDF } = await import('jspdf');
+  const { toJpeg } = await import('html-to-image');
 
   // Initialize PDF (A4 portrait)
   const pdf = new jsPDF({
