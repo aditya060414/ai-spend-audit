@@ -91,6 +91,18 @@ The platform generates a detailed audit report showing estimated monthly and ann
 - **Rate Limiting & Abuse Protection**  
   Backend API protection using request rate limiting to prevent spam submissions and abuse of audit generation endpoints.
 
+## Architecture Overview
+
+AI Spend Audit is built on a modular, type-safe architecture designed for reliability and financial accuracy.
+
+- **Frontend Flow**: Users interact with a responsive landing page, submitting their tool stack through a multi-step form. The state is managed locally and persisted to ensure a smooth user experience.
+- **API Flow**: The frontend communicates with a TypeScript-based Express backend. Inputs are validated using Zod schemas before being processed by the Audit Engine.
+- **Report Generation**: The system uses a deterministic, rule-based Audit Engine to calculate savings. It compares tool plans against a normalized dataset to find optimization opportunities.
+- **Shareable URLs**: Each audit generates a unique `shareId`. This allows reports to be accessed publicly and shared without exposing sensitive lead data, which is captured separately.
+- **AI Summary Generation**: Personalized insights are generated via OpenAI's GPT models, with a robust fallback system that provides deterministic summaries if the AI service is unavailable.
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for full details.
+
 ---
 
 ## Supported tools
@@ -268,33 +280,58 @@ AI-spend-audit/
 └── TESTS.md                # Testing strategy and results
 ```
 
-## Getting Started
+## Local Development
 
-### Prerequisites
+### Clone Repo
 
-- Node.js (v18+)
-- MongoDB
+```bash
+git clone https://github.com/aditya060414/ai-spend-audit.git
+cd ai-spend-audit
+```
 
-### Installation
+### Server Setup
 
-1. **Clone the repository**
-2. **Setup Server**
-   ```bash
-   cd server
-   npm install
-   cp .env.example .env # Add your MongoDB URI and OpenAI API Key
-   npm run dev
-   ```
-3. **Setup Client**
-   ```bash
-   cd client
-   npm install
-   npm run dev
-   ```
+```bash
+cd server
+npm install
+# Update .env with your MONGODB_URI, OPENAI_API_KEY, and BREVO/SMTP credentials
+npm run dev
+```
+
+### Client Setup
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+### Running Tests
+
+```bash
+cd server
+npm test
+```
+
+---
 
 ## Tech Stack
 
-- **Frontend**: React, TypeScript, Tailwind CSS, Recharts, @react-pdf/renderer
-- **Backend**: Node.js, Express, MongoDB, Mongoose, Zod, Resend (for emails)
-- **AI Engine**: OpenAI GPT-4o
-- **Testing**: Vitest, React Testing Library
+### Frontend
+- **React** & **TypeScript** - Core framework
+- **TailwindCSS** - Responsive styling
+- **Framer Motion** - Fluid animations
+- **Recharts** - Interactive data visualization
+- **jsPDF** & **html2canvas** - Client-side PDF generation
+
+### Backend
+- **Express (Node.js)** - API server
+- **MongoDB** & **Mongoose** - Data persistence
+- **Zod** - Schema validation
+- **Nodemailer** - Transactional emails via Brevo SMTP
+- **Express-rate-limit** - API abuse protection
+
+### Infrastructure
+- **Vercel** - Frontend & API hosting
+- **Render** - Alternative backend hosting
+- **Brevo** - Email delivery infrastructure
