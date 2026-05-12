@@ -260,8 +260,8 @@ export function LandingPage() {
               </h2>
             </div>
 
-            <motion.div layout className="space-y-4 mb-6">
-              <AnimatePresence mode="popLayout" initial={false}>
+            <div className="space-y-4 mb-6">
+              <AnimatePresence initial={false}>
                 {tools.map((tool) => (
                   <ToolCard
                     key={tool.id}
@@ -273,7 +273,7 @@ export function LandingPage() {
                   />
                 ))}
               </AnimatePresence>
-            </motion.div>
+            </div>
 
             <button
               type="button"
