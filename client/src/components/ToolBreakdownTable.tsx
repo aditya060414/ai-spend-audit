@@ -1,4 +1,4 @@
-
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import type { Recommendation, ToolAuditResult } from '../types';
 import { cn } from '../lib/utils';
@@ -8,7 +8,7 @@ interface ToolBreakdownTableProps {
   tools: ToolAuditResult[];
 }
 
-export function ToolBreakdownTable({ tools }: ToolBreakdownTableProps) {
+export const ToolBreakdownTable = memo(function ToolBreakdownTable({ tools }: ToolBreakdownTableProps) {
   const getActionConfig = (action: Recommendation) => {
     switch (action) {
       case 'keep':
@@ -120,4 +120,4 @@ export function ToolBreakdownTable({ tools }: ToolBreakdownTableProps) {
       </div>
     </motion.div>
   );
-}
+});
