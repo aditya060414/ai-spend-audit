@@ -1,8 +1,7 @@
-
 import { memo } from 'react';
-import { motion, type Variants } from 'framer-motion';
 import { DollarSign, ArrowDownRight, Wallet, PiggyBank } from 'lucide-react';
 import type { AuditSummary } from '../types';
+import { cn } from '../lib/utils';
 
 interface SummaryCardsProps {
   summary: AuditSummary;
@@ -54,29 +53,21 @@ export const SummaryCards = memo(function SummaryCards({ summary }: SummaryCards
     },
   ];
 
-  const container: Variants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
-  };
 
-  const item: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
-  };
 
   return (
-    <motion.div 
+    <div 
       data-testid="summary-cards"
-      variants={container}
-      initial="hidden"
-      animate="show"
       className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10"
     >
       {cards.map((card, index) => (
-        <motion.div key={index} variants={item} className="glass-card rounded-xl p-5 relative overflow-hidden group">
+        <div 
+          key={index} 
+          className={cn(
+            "glass-card rounded-xl p-5 relative overflow-hidden group animate-fade-in-up",
+            index === 0 ? "delay-100" : index === 1 ? "delay-200" : index === 2 ? "delay-300" : "delay-300"
+          )}
+        >
           <div className="flex items-start justify-between relative z-10">
             <div>
               <p className="text-sm font-medium text-zinc-400 mb-1">{card.title}</p>
@@ -91,8 +82,8 @@ export const SummaryCards = memo(function SummaryCards({ summary }: SummaryCards
           
           {/* Subtle hover gradient */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        </motion.div>
+        </div>
       ))}
-    </motion.div>
+    </div>
   );
 });

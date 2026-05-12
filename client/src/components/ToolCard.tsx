@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
 import type { ToolInput } from "../types";
 import { cn } from "../lib/utils";
@@ -19,18 +18,9 @@ export function ToolCard({
   toolNames,
 }: ToolCardProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
-      transition={{
-        type: "spring",
-        stiffness: 500,
-        damping: 35,
-        mass: 1,
-      }}
+    <div
       className={cn(
-        "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 lg:gap-3 items-end",
+        "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 lg:gap-3 items-end animate-fade-in-up",
         "bg-zinc-950/50 p-4 lg:p-5 rounded-xl border border-zinc-800/80 shadow-sm hover:border-zinc-700/50",
         "will-change-transform",
       )}
@@ -152,6 +142,6 @@ export function ToolCard({
           </span>
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 }

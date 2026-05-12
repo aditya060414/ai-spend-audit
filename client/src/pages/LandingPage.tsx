@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import api from "../lib/api";
-import { motion, AnimatePresence } from "framer-motion";
 import { Plus, ShieldCheck, ChevronRight, Loader2, Wand2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { z } from "zod";
@@ -46,6 +45,7 @@ export function LandingPage() {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [teamSize, setTeamSize] = useState<string>(() => {
+    // check for data that is stored in local storage
     const saved = localStorage.getItem("audit_form_state");
     if (saved) {
       try {
@@ -189,7 +189,7 @@ export function LandingPage() {
 
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 lg:pt-20">
         {/* Header */}
-        <div className="text-center mb-10 lg:mb-16">
+        <div className="text-center mb-10 lg:mb-16 animate-fade-in-up">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-800/50 border border-zinc-700/50 text-[10px] lg:text-xs font-medium text-zinc-400 mb-6">
             <Wand2 className="w-3.5 h-3.5 text-emerald-400" />
             <span>AI-Powered Financial Optimization</span>
@@ -261,18 +261,16 @@ export function LandingPage() {
             </div>
 
             <div className="space-y-4 mb-6">
-              <AnimatePresence initial={false}>
-                {tools.map((tool) => (
-                  <ToolCard
-                    key={tool.id}
-                    tool={tool}
-                    onUpdate={handleUpdateTool}
-                    onRemove={handleRemoveTool}
-                    supportedTools={SUPPORTED_TOOLS}
-                    toolNames={TOOL_NAMES}
-                  />
-                ))}
-              </AnimatePresence>
+              {tools.map((tool) => (
+                <ToolCard
+                  key={tool.id}
+                  tool={tool}
+                  onUpdate={handleUpdateTool}
+                  onRemove={handleRemoveTool}
+                  supportedTools={SUPPORTED_TOOLS}
+                  toolNames={TOOL_NAMES}
+                />
+              ))}
             </div>
 
             <button
@@ -315,18 +313,14 @@ export function LandingPage() {
                   </div>
 
                   {currentMonthlySpend > 100 && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className="px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20"
-                    >
+                    <div className="px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 animate-fade-in">
                       <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest mb-0.5">
                         Est. Savings
                       </p>
                       <p className="text-sm font-bold text-emerald-400">
                         Up to 35%
                       </p>
-                    </motion.div>
+                    </div>
                   )}
                 </div>
               )}

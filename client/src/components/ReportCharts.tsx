@@ -42,7 +42,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   return null;
 };
 
-export function SpendChartsSection({ summary }: SpendChartsSectionProps) {
+export function ReportCharts({ summary }: SpendChartsSectionProps) {
   const barData = useMemo(() => summary.perTool.map(t => ({
     name: t.toolName.length > 10 ? t.toolName.slice(0, 10) + '…' : t.toolName,
     fullName: t.toolName,

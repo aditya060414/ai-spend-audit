@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { motion } from 'framer-motion';
 import type { Recommendation, ToolAuditResult } from '../types';
 import { cn } from '../lib/utils';
 import { CheckCircle2, ArrowDownCircle, RefreshCw, XCircle, Coins } from 'lucide-react';
@@ -39,12 +38,9 @@ export const ToolBreakdownTable = memo(function ToolBreakdownTable({ tools }: To
   };
 
   return (
-    <motion.div
+    <div
       data-testid="tool-breakdown"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
-      className="glass-card rounded-xl overflow-hidden mb-10"
+      className="glass-card rounded-xl overflow-hidden mb-10 animate-fade-in-up"
     >
       <div className="p-6 border-b border-zinc-800/50">
         <h2 className="text-xl font-medium text-zinc-100">Tool Breakdown</h2>
@@ -68,12 +64,10 @@ export const ToolBreakdownTable = memo(function ToolBreakdownTable({ tools }: To
             {(tools || []).map((tool, idx) => {
               const ActionIcon = getActionConfig(tool.recommendedAction).icon;
               return (
-                <motion.tr 
+                <tr 
                   key={idx}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 + (idx * 0.1) }}
-                  className="hover:bg-zinc-800/30 transition-colors"
+                  className="hover:bg-zinc-800/30 transition-colors animate-fade-in"
+                  style={{ animationDelay: `${0.3 + (idx * 0.05)}s` }}
                 >
                   <td className="px-6 py-4 font-medium text-zinc-200">
                     <div className="flex flex-col gap-1">
@@ -112,12 +106,12 @@ export const ToolBreakdownTable = memo(function ToolBreakdownTable({ tools }: To
                       {tool.monthlySavings > 0 ? `+${formatCurrency(tool.monthlySavings)}` : '-'}
                     </span>
                   </td>
-                </motion.tr>
+                </tr>
               );
             })}
           </tbody>
         </table>
       </div>
-    </motion.div>
+    </div>
   );
 });

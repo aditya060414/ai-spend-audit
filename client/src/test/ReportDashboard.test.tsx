@@ -13,8 +13,8 @@ vi.mock('../components/SummaryCards', () => ({
   SummaryCards: () => <div data-testid="summary-cards">Summary Cards</div>,
 }));
 
-vi.mock('../components/SpendChartsSection', () => ({
-  SpendChartsSection: () => <div data-testid="spend-charts">Charts</div>,
+vi.mock('../components/ReportCharts', () => ({
+  ReportCharts: () => <div data-testid="spend-charts">Charts</div>,
 }));
 
 vi.mock('../components/ToolBreakdownTable', () => ({
@@ -31,6 +31,14 @@ vi.mock('../components/ExportModal', () => ({
 
 vi.mock('../components/ShareSection', () => ({
   ShareSection: () => <div data-testid="share-section">Share Section</div>,
+}));
+
+vi.mock('../components/HighSavingsCTA', () => ({
+  HighSavingsCTA: () => <div data-testid="high-savings-cta">Schedule Consultation</div>,
+}));
+
+vi.mock('../components/EnterpriseCTA', () => ({
+  EnterpriseCTA: () => <div data-testid="enterprise-cta">Enterprise Solutions</div>,
 }));
 
 const mockData: ReportData = {
@@ -50,9 +58,9 @@ const renderDashboard = (data = mockData, accessLevel = { isOwner: true, isLead:
 };
 
 describe('ReportDashboard', () => {
-  it('renders AI summary when provided', () => {
+  it('renders AI summary when provided', async () => {
     renderDashboard();
-    const summaryCard = screen.getByTestId('ai-summary');
+    const summaryCard = await screen.findByTestId('ai-summary');
     expect(summaryCard).toBeInTheDocument();
     
     const { getByText } = within(summaryCard);
@@ -64,9 +72,9 @@ describe('ReportDashboard', () => {
     expect(screen.queryByTestId('ai-summary')).not.toBeInTheDocument();
   });
 
-  it('shows enterprise CTA for high value users', () => {
+  it('shows enterprise CTA for high value users', async () => {
     renderDashboard(mockData, { isOwner: true, isLead: true, isHighValue: true });
-    expect(screen.getByText(/Enterprise Solutions/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Enterprise Solutions/i)).toBeInTheDocument();
   });
 
   it('shows efficient spending message for low savings', () => {
@@ -81,7 +89,7 @@ describe('ReportDashboard', () => {
     expect(screen.getByText(/You're spending efficiently/i)).toBeInTheDocument();
   });
 
-  it('shows high savings CTA for large savings', () => {
+  it('shows high savings CTA for large savings', async () => {
     renderDashboard({
       ...mockData,
       auditResults: {
@@ -90,14 +98,14 @@ describe('ReportDashboard', () => {
         savingsCategory: 'critical'
       }
     });
-    expect(screen.getByText(/Schedule Consultation/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Schedule Consultation/i)).toBeInTheDocument();
   });
 
-  it('renders all sections', () => {
+  it('renders all sections', async () => {
     renderDashboard();
-    expect(screen.getByTestId('summary-cards')).toBeInTheDocument();
-    expect(screen.getByTestId('spend-charts')).toBeInTheDocument();
-    expect(screen.getByTestId('tool-breakdown')).toBeInTheDocument();
-    expect(screen.getByTestId('recommendations')).toBeInTheDocument();
+    expect(await screen.findByTestId('summary-cards')).toBeInTheDocument();
+    expect(await screen.findByTestId('spend-charts')).toBeInTheDocument();
+    expect(await screen.findByTestId('tool-breakdown')).toBeInTheDocument();
+    expect(await screen.findByTestId('recommendations')).toBeInTheDocument();
   });
 });

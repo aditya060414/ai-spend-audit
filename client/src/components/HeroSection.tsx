@@ -1,5 +1,5 @@
 
-import { motion } from 'framer-motion';
+
 import { TrendingDown } from 'lucide-react';
 import type { SavingsCategory } from '../types';
 import { cn } from '../lib/utils';
@@ -39,11 +39,7 @@ export function HeroSection({ savingsCategory, isEfficient }: HeroSectionProps) 
 
   return (
     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
+      <div className="animate-fade-in-up">
         <div className="flex items-center gap-3 mb-3">
           <div className="p-2 bg-zinc-800/80 rounded-lg border border-zinc-700/50">
             <TrendingDown className="w-5 h-5 text-emerald-400" />
@@ -63,7 +59,7 @@ export function HeroSection({ savingsCategory, isEfficient }: HeroSectionProps) 
             ? "Your AI stack is lean and optimized. Here is the full financial breakdown."
             : "Optimization insights and financial analysis for your AI tooling stack."}
         </p>
-      </motion.div>
+      </div>
     </div>
   );
 }
