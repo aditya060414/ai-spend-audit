@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend,
@@ -42,16 +43,16 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
 };
 
 export function SpendChartsSection({ summary }: SpendChartsSectionProps) {
-  const barData = summary.perTool.map(t => ({
+  const barData = useMemo(() => summary.perTool.map(t => ({
     name: t.toolName.length > 10 ? t.toolName.slice(0, 10) + '…' : t.toolName,
     fullName: t.toolName,
     Current: t.currentMonthlySpending,
     Optimized: t.projectedMonthlyCost,
-  }));
+  })), [summary.perTool]);
 
-  const pieData = summary.perTool
+  const pieData = useMemo(() => summary.perTool
     .filter(t => t.monthlySavings > 0)
-    .map(t => ({ name: t.toolName, value: t.monthlySavings }));
+    .map(t => ({ name: t.toolName, value: t.monthlySavings })), [summary.perTool]);
 
   return (
     <motion.div
