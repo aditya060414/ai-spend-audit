@@ -115,10 +115,26 @@ export function generateFallbackSummary(
     (a, b) => b.monthlySavings - a.monthlySavings,
   )[0];
 
+  const hasConsolidation = results.perTool.some(
+    (t) => t.recommendedAction === "consolidate",
+  );
+  const hasSwitch = results.perTool.some((t) => t.recommendedAction === "switch");
+
+  let strategyNotes = "";
+  if (hasConsolidation && hasSwitch) {
+    strategyNotes =
+      " This plan focuses on consolidating redundant tools and switching to more cost-effective alternatives.";
+  } else if (hasConsolidation) {
+    strategyNotes = " We recommend consolidating redundant tools to reduce bloat.";
+  } else if (hasSwitch) {
+    strategyNotes =
+      " We recommend switching to more cost-effective alternatives for your specific workflow.";
+  }
+
   return (
     `Your ${input.teamSize}-person team currently spends across ${toolList} for ${input.useCases} workflows. ` +
     `This audit identified approximately $${results.totalMonthlySavings}/month ` +
-    `($${results.totalAnnualSavings}/year) in potential savings. ` +
+    `($${results.totalAnnualSavings}/year) in potential savings.${strategyNotes} ` +
     `The largest optimization opportunity is ${biggestSaving.toolName}. ` +
     `Review the recommendations below and prioritize that change first.`
   );
