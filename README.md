@@ -310,7 +310,9 @@ npm run dev
 
 ```bash
 cd server
-npm test
+npm run test
+cd client
+npm run test
 ```
 
 ---

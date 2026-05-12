@@ -182,3 +182,75 @@
 - Perform end-to-end testing of the lead capture and email flow.
 - Optimize performance and SEO meta tags.
 
+---
+
+## Day 6 - 11-05-2026
+
+**Hours worked:** 8
+
+### Today's Work
+
+- Implemented the responsive **Landing Page** with modern UI components and animations.
+- Created a multi-step **UserInputForm** for collecting SaaS tool usage data.
+- Developed the **ReportPage** with dynamic sections for AI summaries, spend charts, and recommendations.
+- Built an advanced **PDF Export** system supporting themes, quality settings, and content customization.
+- Added **Gated Access** for report downloading and sharing, requiring email signup.
+- Integrated **Toast Notifications** for user feedback and status updates.
+- Created **Email Service** for sending audit reports to leads.
+- Implemented **Input Validation** using Zod and secure **Rate Limiting**.
+
+### Learnings
+
+- Mastered client-side PDF generation using html2canvas and jsPDF.
+- Implemented responsive design patterns for various screen sizes.
+- Integrated backend APIs for dynamic data retrieval and processing.
+- Enhanced error handling for a robust user experience.
+
+### Blockers
+
+- Initial challenges with PDF layout and element positioning on different screen sizes.
+- Resolved issues with theme synchronization between the frontend and PDF generation.
+
+### Plan for Tomorrow
+
+- Finalize production deployment and environment configuration.
+- Perform end-to-end testing of the lead capture and email flow.
+- Optimize performance and SEO meta tags.
+- Add comprehensive unit and integration tests for the frontend components.
+
+---
+
+## Day 7 - 12-05-2026
+
+**Hours worked:** 6
+
+### Today's Work
+
+#### Performance Optimization
+- Improved application performance using **Lazy Loading** for heavy components (Charts, Tool Breakdown Table).
+- Deferred loading of heavy chart libraries (Recharts) to reduce initial bundle size.
+- Optimized the global CSS and removed unused animation libraries (Framer Motion) to improve First Contentful Paint (FCP).
+- Further split chart bundles using dynamic imports for specific chart types.
+- Optimized server-side rendering or static site generation for the landing page.
+- Removed Resend integration and connected Brevo.
+- Complete documentation for the project.
+
+#### Testing & Verification
+- Verified backend API endpoints with proper error handling and rate limiting.
+- Updated frontend components to handle API responses and edge cases gracefully.
+- Verified lead capture and email flow functionality end-to-end.
+
+### Learnings
+
+- Optimized application performance using lazy loading and code splitting techniques.
+- Improved First Contentful Paint (FCP) by removing unused libraries and optimizing CSS.
+- Verified end-to-end functionality of the application with proper testing and error handling.
+
+### Blockers
+
+- Initial performance bottlenecks due to heavy chart library loading.
+- Resolved issues with CSS and animation library optimization for better FCP.
+
+### Plan for Tomorrow
+
+- Finalize production deployment and environment configuration.
