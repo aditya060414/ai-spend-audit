@@ -17,9 +17,10 @@ export function ReportPage() {
   
   const [accessLevel, setAccessLevel] = useState(() => {
     const localData = JSON.parse(localStorage.getItem(`report_${shareId}`) || '{}');
+    const globalLead = localStorage.getItem('leadCaptured') === 'true';
     return {
       isOwner: !!localData.isOwner,
-      isLead: !!localData.isLead, 
+      isLead: !!localData.isLead || globalLead, 
       isHighValue: !!localData.isHighValue,
     };
   });
@@ -75,6 +76,7 @@ export function ReportPage() {
     const newAccess = { isOwner: true, isLead: true, isHighValue };
     setAccessLevel(newAccess);
     localStorage.setItem(`report_${shareId}`, JSON.stringify(newAccess));
+    localStorage.setItem('leadCaptured', 'true');
     setShowLeadCapture(false);
     fetchReport(); // Re-fetch to get the full (un-gated) data
   };

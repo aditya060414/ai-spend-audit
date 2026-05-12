@@ -107,9 +107,11 @@ export function ReportDashboard({ data, accessLevel: _accessLevel }: ReportDashb
             )}
           </div>
           
-          {isHighSavings ? (
+          {isHighSavings && _accessLevel?.isLead && (
             <HighSavingsCTA savings={auditResults.totalMonthlySavings} />
-          ) : (
+          )}
+          
+          {!isHighSavings && (
             <div className="mt-12 p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl text-center">
               <h3 className="text-xl font-bold text-zinc-100 mb-2">You're spending efficiently!</h3>
               <p className="text-zinc-400 mb-6">Your tool stack is well-optimized. Subscribe to our newsletter for more efficiency tips.</p>
