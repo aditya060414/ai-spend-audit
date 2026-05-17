@@ -3,7 +3,6 @@
 **AI Spend Audit** is a web application that helps startups, engineering teams or any individual who are spending amount on multiple AI. This tool helps them save cost over AI and recommend them a better version which will save money.
 
 **Live Demo:** https://ai-spend-audit-user.vercel.app/
-**GitHub Repo:** https://github.com/aditya060414/ai-spend-audit
 
 ---
 
